@@ -2,8 +2,6 @@
 //  FurlingApp.swift
 //  Furling
 //
-//  Created by adam on 8/12/26.
-//
 
 import SwiftUI
 
@@ -11,7 +9,7 @@ import SwiftUI
 struct FurlingApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            TodayView()
         }
     }
 }
