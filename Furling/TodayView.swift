@@ -3,8 +3,8 @@
 //  Furling
 //
 //  The app exists mainly to hold the HealthKit permission the widget relies
-//  on, so it stays deliberately thin: one number, and a way to force a
-//  widget refresh.
+//  on, so it stays deliberately thin: one number, a note about where that
+//  number came from, and a way to force a widget refresh.
 //
 
 import SwiftUI
@@ -13,8 +13,8 @@ import WidgetKit
 struct TodayView: View {
     @Environment(\.scenePhase) private var scenePhase
 
-    @State private var miles: Double?
-    @State private var problem: String?
+    @State private var reading: DistanceStore.Reading = .live(0)
+    @State private var authProblem: String?
 
     var body: some View {
         VStack(spacing: 8) {
@@ -26,11 +26,11 @@ struct TodayView: View {
                 .textCase(.uppercase)
                 .foregroundStyle(.secondary)
 
-            Text(miles.map { String(format: "%.2f", $0) } ?? "—")
+            Text(String(format: "%.2f", reading.miles))
                 .font(.system(size: 88, weight: .light, design: .rounded))
                 .monospacedDigit()
                 .contentTransition(.numericText())
-                .animation(.default, value: miles)
+                .animation(.default, value: reading)
 
             Text("miles walked")
                 .font(.title3)
@@ -38,13 +38,11 @@ struct TodayView: View {
 
             Spacer()
 
-            if let problem {
-                Text(problem)
-                    .font(.footnote)
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(.orange)
-                    .padding(.horizontal)
-            }
+            status
+                .font(.footnote)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 32)
+                .frame(minHeight: 40)
 
             Button("Refresh") {
                 Task { await load() }
@@ -58,27 +56,38 @@ struct TodayView: View {
         }
     }
 
+    /// Mirrors the widget's symbol vocabulary, with room here to explain.
+    @ViewBuilder
+    private var status: some View {
+        switch reading {
+        case .live:
+            if let authProblem {
+                Label(authProblem, systemImage: "exclamationmark.triangle")
+                    .foregroundStyle(.orange)
+            }
+        case .stale:
+            Label("Showing the last reading from earlier today.",
+                  systemImage: "clock.arrow.circlepath")
+                .foregroundStyle(.secondary)
+        case .unavailable:
+            Label("Can't read Health data right now. Unlock the phone, or check Settings › Privacy & Security › Health › Furling.",
+                  systemImage: "exclamationmark.triangle")
+                .foregroundStyle(.orange)
+        }
+    }
+
     private func begin() async {
         do {
             try await DistanceStore.requestAuthorization()
         } catch {
-            problem = error.localizedDescription
-            return
+            authProblem = error.localizedDescription
         }
         await load()
     }
 
     private func load() async {
-        do {
-            miles = try await DistanceStore.milesToday()
-            problem = nil
-            WidgetCenter.shared.reloadAllTimelines()
-        } catch {
-            // A denied permission surfaces here as a zero-sample read rather
-            // than an error, so check Settings > Privacy > Health if this
-            // stays at 0.00 after a walk.
-            problem = error.localizedDescription
-        }
+        reading = await DistanceStore.reading()
+        WidgetCenter.shared.reloadAllTimelines()
     }
 }
 

@@ -4,8 +4,8 @@
 //
 //  .accessoryInline is the strip beside the lock screen date. It gets one
 //  line, the system font, one optional SF Symbol, and a single tint colour
-//  applied by the OS. Anything else you set here is discarded, so the design
-//  work is entirely in choosing what fits.
+//  applied by the OS. Anything else you set here is discarded, so the symbol
+//  is the only place state can be signalled without spending width.
 //
 
 import WidgetKit
@@ -15,8 +15,7 @@ import SwiftUI
 
 struct MilesEntry: TimelineEntry {
     let date: Date
-    /// nil means we couldn't reach HealthKit and had no usable cache.
-    let miles: Double?
+    let reading: DistanceStore.Reading
 }
 
 // MARK: - Provider
@@ -24,22 +23,22 @@ struct MilesEntry: TimelineEntry {
 struct MilesProvider: TimelineProvider {
 
     func placeholder(in context: Context) -> MilesEntry {
-        MilesEntry(date: Date(), miles: 3.7)
+        MilesEntry(date: Date(), reading: .live(3.7))
     }
 
     func getSnapshot(in context: Context, completion: @escaping (MilesEntry) -> Void) {
         // The widget gallery renders a snapshot; querying Health there is
         // slow and may be unauthorized, so show a representative value.
         if context.isPreview {
-            completion(MilesEntry(date: Date(), miles: 3.7))
+            completion(MilesEntry(date: Date(), reading: .live(3.7)))
             return
         }
-        Task { completion(await reading()) }
+        Task { completion(MilesEntry(date: Date(), reading: await DistanceStore.reading())) }
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<MilesEntry>) -> Void) {
         Task {
-            let entry = await reading()
+            let entry = MilesEntry(date: Date(), reading: await DistanceStore.reading())
 
             // Ask again in 15 minutes, or at midnight if that comes first, so
             // the counter resets promptly for the new day. WidgetKit budgets
@@ -54,14 +53,6 @@ struct MilesProvider: TimelineProvider {
             completion(Timeline(entries: [entry], policy: .after(min(quarterHour, midnight))))
         }
     }
-
-    private func reading() async -> MilesEntry {
-        do {
-            return MilesEntry(date: Date(), miles: try await DistanceStore.milesToday())
-        } catch {
-            return MilesEntry(date: Date(), miles: DistanceStore.cachedMiles())
-        }
-    }
 }
 
 // MARK: - View
@@ -71,16 +62,22 @@ struct FurlingWidgetView: View {
 
     var body: some View {
         Label {
-            Text(label)
+            Text(DistanceStore.short(entry.reading.miles))
         } icon: {
-            Image(systemName: "figure.walk")
+            Image(systemName: symbol)
         }
         .containerBackground(.clear, for: .widget)
     }
 
-    private var label: String {
-        guard let miles = entry.miles else { return "— mi" }
-        return DistanceStore.short(miles)
+    /// The number is always real-looking, so the symbol says how much to
+    /// trust it: walking figure for a live reading, a clock for a cached one,
+    /// a warning triangle when the zero is a placeholder rather than a fact.
+    private var symbol: String {
+        switch entry.reading {
+        case .live:        return "figure.walk"
+        case .stale:       return "clock.arrow.circlepath"
+        case .unavailable: return "exclamationmark.triangle"
+        }
     }
 }
 
@@ -99,10 +96,28 @@ struct FurlingWidget: Widget {
     }
 }
 
-#Preview(as: .accessoryInline) {
+#Preview("Timeline", as: .accessoryInline) {
     FurlingWidget()
 } timeline: {
-    MilesEntry(date: Date(), miles: 3.7)
-    MilesEntry(date: Date(), miles: 12.4)
-    MilesEntry(date: Date(), miles: nil)
+    MilesEntry(date: Date(), reading: .live(3.7))
+    MilesEntry(date: Date(), reading: .live(0))
+    MilesEntry(date: Date(), reading: .stale(2.1))
+    MilesEntry(date: Date(), reading: .unavailable)
+}
+
+// All four states at once, for comparing symbol widths side by side.
+// This is plain SwiftUI rather than a real widget, so the lock screen's
+// monochrome tint, vibrancy, and truncation aren't applied — use the
+// Timeline preview above to check those.
+#Preview("All states") {
+    VStack(alignment: .leading, spacing: 18) {
+        FurlingWidgetView(entry: MilesEntry(date: Date(), reading: .live(3.7)))
+        FurlingWidgetView(entry: MilesEntry(date: Date(), reading: .live(0)))
+        FurlingWidgetView(entry: MilesEntry(date: Date(), reading: .stale(2.1)))
+        FurlingWidgetView(entry: MilesEntry(date: Date(), reading: .unavailable))
+    }
+    .font(.system(size: 17, weight: .medium))
+    .foregroundStyle(.white)
+    .padding(28)
+    .background(Color.black)
 }

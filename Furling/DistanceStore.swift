@@ -95,6 +95,36 @@ enum DistanceStore {
         return defaults.double(forKey: milesKey)
     }
 
+    // MARK: - Reading state
+
+    /// What the display is actually showing, so the UI can be honest about
+    /// where the number came from.
+    enum Reading: Equatable {
+        /// HealthKit answered. Zero here is a real zero.
+        case live(Double)
+        /// The query failed; this is the last good value from earlier today.
+        case stale(Double)
+        /// The query failed and there was nothing cached. Showing zero.
+        case unavailable
+
+        var miles: Double {
+            switch self {
+            case .live(let m), .stale(let m): return m
+            case .unavailable: return 0
+            }
+        }
+    }
+
+    /// Never throws. Degrades from live, to cached, to zero.
+    static func reading() async -> Reading {
+        do {
+            return .live(try await milesToday())
+        } catch {
+            if let cached = cachedMiles() { return .stale(cached) }
+            return .unavailable
+        }
+    }
+
     // MARK: - Formatting
 
     /// One decimal place: "3.7 mi". Change to "%.2f mi" for two.
