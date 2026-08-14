@@ -35,7 +35,8 @@ struct SettingsView: View {
                 } header: {
                     Text("widget symbols")
                 } footer: {
-                    Text("Health data can't be read until the phone has been unlocked once after a restart. If the warning symbol sticks around, check Settings › Privacy & Security › Health › Furling and make sure Walking + Running Distance is switched on.")
+                    Text("Apple Health data can't be read until the phone has been unlocked once after a restart. If the warning symbol sticks around, check Settings › Privacy & Security › Health › Furling and make sure Walking + Running Distance is switched on.")
+                        .padding(.top, 12)
                 }
                 // Grouped lists uppercase section headers by default; this
                 // keeps "widget symbols" as written.
