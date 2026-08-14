@@ -8,7 +8,19 @@
 //
 
 import SwiftUI
+import UIKit
 import WidgetKit
+
+extension Color {
+    /// Off-white and off-black rather than the system's pure values.
+    /// Note this departs from `systemBackground`; on OLED the dark variant
+    /// no longer switches pixels fully off.
+    static let furlingBackground = Color(uiColor: UIColor { traits in
+        traits.userInterfaceStyle == .dark
+            ? UIColor(red: 0.078, green: 0.094, blue: 0.114, alpha: 1)  // #14181D
+            : UIColor(red: 0.953, green: 0.957, blue: 0.965, alpha: 1)  // #F3F4F6
+    })
+}
 
 struct TodayView: View {
     @Environment(\.scenePhase) private var scenePhase
@@ -70,6 +82,8 @@ struct TodayView: View {
                 .padding(.top, 18)
                 .padding(.bottom, 24)
         }
+        .frame(maxWidth: .infinity)
+        .background(Color.furlingBackground.ignoresSafeArea())
         .sheet(isPresented: $showingSettings) {
             SettingsView()
         }

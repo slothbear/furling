@@ -2,14 +2,6 @@
 //  SettingsView.swift
 //  Furling
 //
-//  Created by adam on 8/14/26.
-//
-
-
-//
-//  SettingsView.swift
-//  Furling
-//
 //  Reached from the gear on the main screen. Currently just the symbol
 //  legend, but it's the single entry point for anything configurable that
 //  arrives later — units, decimal places — so testers only learn one place
@@ -49,6 +41,8 @@ struct SettingsView: View {
                 // keeps "widget symbols" as written.
                 .textCase(nil)
             }
+            .scrollContentBackground(.hidden)
+            .background(Color.furlingBackground.ignoresSafeArea())
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
