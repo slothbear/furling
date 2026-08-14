@@ -15,9 +15,24 @@ struct TodayView: View {
 
     @State private var reading: DistanceStore.Reading = .live(0)
     @State private var authProblem: String?
+    @State private var showingSettings = false
 
     var body: some View {
         VStack(spacing: 8) {
+            HStack {
+                Spacer()
+                Button {
+                    showingSettings = true
+                } label: {
+                    Image(systemName: "gearshape")
+                        .font(.title3)
+                        .foregroundStyle(.secondary)
+                }
+                .accessibilityLabel("Settings")
+            }
+            .padding(.horizontal, 24)
+            .padding(.top, 8)
+
             Spacer()
 
             Text("Today")
@@ -54,6 +69,9 @@ struct TodayView: View {
                 .foregroundStyle(.tertiary)
                 .padding(.top, 18)
                 .padding(.bottom, 24)
+        }
+        .sheet(isPresented: $showingSettings) {
+            SettingsView()
         }
         .task { await begin() }
         .onChange(of: scenePhase) { _, phase in
