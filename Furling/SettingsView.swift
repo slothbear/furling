@@ -20,17 +20,17 @@ struct SettingsView: View {
                     LegendRow(
                         symbol: "figure.walk",
                         title: "Live reading",
-                        detail: "The number came straight from Health. A zero here means you haven't walked yet today."
+                        detail: "The number came straight from Apple Health. A zero here means you haven't walked yet today.\n\nLock screen widgets update on iOS's schedule, not Furling's, so the widget can trail a few minutes behind. Opening the app updates it right away. You can tap on the widget to open the app."
                     )
                     LegendRow(
                         symbol: "clock.arrow.circlepath",
                         title: "Last known reading",
-                        detail: "Health couldn't be read, so this is the most recent figure from earlier today."
+                        detail: "Apple Health couldn't be read, so this is the most recent figure from earlier today."
                     )
                     LegendRow(
                         symbol: "exclamationmark.triangle",
                         title: "No reading",
-                        detail: "Health couldn't be read and nothing was stored yet. The zero is a placeholder, not a measurement."
+                        detail: "Apple Health couldn't be read and nothing was stored yet. The zero is a placeholder, not a measurement."
                     )
                 } header: {
                     Text("widget symbols")
