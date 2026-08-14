@@ -48,7 +48,12 @@ struct TodayView: View {
                 Task { await load() }
             }
             .buttonStyle(.bordered)
-            .padding(.bottom, 32)
+
+            Text(buildLabel)
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+                .padding(.top, 18)
+                .padding(.bottom, 24)
         }
         .task { await begin() }
         .onChange(of: scenePhase) { _, phase in
@@ -74,6 +79,16 @@ struct TodayView: View {
                   systemImage: "exclamationmark.triangle")
                 .foregroundStyle(.orange)
         }
+    }
+
+    /// Marketing version and build number, e.g. "Furling 1.0, build 2".
+    /// The build number is labelled rather than parenthesised so a tester
+    /// can find it without knowing the convention.
+    private var buildLabel: String {
+        let info = Bundle.main.infoDictionary
+        let version = info?["CFBundleShortVersionString"] as? String ?? "—"
+        let build = info?["CFBundleVersion"] as? String ?? "—"
+        return "Furling \(version), build \(build)"
     }
 
     private func begin() async {
