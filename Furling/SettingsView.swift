@@ -20,24 +20,22 @@ struct SettingsView: View {
                     LegendRow(
                         symbol: "hare",
                         title: "Live reading",
-                        detail: "The number came straight from Apple Health. A zero here means you haven't walked yet today.\n\nLock screen widgets update on iOS's schedule, not Furling's, so the widget can trail a few minutes behind. Opening the app updates it right away. You can tap on the widget to open the app."
+                        detail: "The number came from Apple Health. A zero here means you haven't walked yet today.\n\nLock screen widgets update on iOS's schedule, not Furling's, so the widget can trail a few minutes behind. Opening the app updates it right away. You can tap on the widget to open the app."
                     )
                     LegendRow(
                         symbol: "clock.arrow.circlepath",
                         title: "Last known reading",
-                        detail: "Apple Health couldn't be read, so this is the most recent figure from earlier today."
+                        detail: "Apple Health couldn't be read, so this is the most recent reading from earlier today."
                     )
                     LegendRow(
                         symbol: "exclamationmark.triangle",
                         title: "No reading",
-                        detail: "Apple Health couldn't be read and nothing was stored yet. The zero is a placeholder, not a measurement."
+                        detail: "Apple Health returned an error. \n\nApple Health data can't be read until the phone has been unlocked once after a restart.\n\nIf the warning symbol persists, check Settings › Privacy & Security › Health › Furling and make sure Walking + Running Distance is enabled."
                     )
                 } header: {
                     Text("widget symbols")
-                } footer: {
-                    Text("Apple Health data can't be read until the phone has been unlocked once after a restart. If the warning symbol sticks around, check Settings › Privacy & Security › Health › Furling and make sure Walking + Running Distance is switched on.")
-                        .padding(.top, 12)
                 }
+                
                 // Grouped lists uppercase section headers by default; this
                 // keeps "widget symbols" as written.
                 .textCase(nil)
