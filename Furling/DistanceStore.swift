@@ -52,6 +52,13 @@ enum DistanceStore {
                 options: .cumulativeSum
             ) { _, statistics, error in
                 if let error {
+                    // HealthKit reports "no data" as an error rather than an
+                    // empty sum. That's still a legitimate zero — nobody's
+                    // walked yet today — not a read failure.
+                    if let hkError = error as? HKError, hkError.code == .errorNoData {
+                        continuation.resume(returning: 0)
+                        return
+                    }
                     continuation.resume(throwing: error)
                     return
                 }
