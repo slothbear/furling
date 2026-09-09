@@ -21,7 +21,7 @@ Name is a pun: furlong (distance unit) + the Furlings from Stargate.
 - **`DistanceStore.Reading`** is a three-state enum: `.live`, `.stale`
   (cached from earlier today), `.unavailable`. The widget shows a real number
   in all three cases and signals the state through the SF Symbol instead:
-  `figure.walk` / `clock.arrow.circlepath` / `exclamationmark.triangle`.
+  `hare` / `clock.arrow.circlepath` / `exclamationmark.triangle`.
   A placeholder zero must never look like a measured zero.
 - **App Group `UserDefaults`** caches the last good reading, because HealthKit
   is unreadable between a reboot and the first unlock.

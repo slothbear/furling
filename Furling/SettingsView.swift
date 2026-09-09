@@ -18,7 +18,7 @@ struct SettingsView: View {
             List {
                 Section {
                     LegendRow(
-                        symbol: "figure.walk",
+                        symbol: "hare",
                         title: "Live reading",
                         detail: "The number came straight from Apple Health. A zero here means you haven't walked yet today.\n\nLock screen widgets update on iOS's schedule, not Furling's, so the widget can trail a few minutes behind. Opening the app updates it right away. You can tap on the widget to open the app."
                     )

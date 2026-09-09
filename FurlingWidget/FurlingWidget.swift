@@ -70,11 +70,11 @@ struct FurlingWidgetView: View {
     }
 
     /// The number is always real-looking, so the symbol says how much to
-    /// trust it: walking figure for a live reading, a clock for a cached one,
+    /// trust it: hare for a live reading, a clock for a cached one,
     /// a warning triangle when the zero is a placeholder rather than a fact.
     private var symbol: String {
         switch entry.reading {
-        case .live:        return "figure.walk"
+        case .live:        return "hare"
         case .stale:       return "clock.arrow.circlepath"
         case .unavailable: return "exclamationmark.triangle"
         }
