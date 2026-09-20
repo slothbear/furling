@@ -63,7 +63,8 @@ Open threads:
 - **Never use the word "just".**
 - Settle on names *before* building anything — files, scripts, projects. He
   dislikes rework on names.
-- Minimal capitalisation in UI strings. Flag capitalisation choices as they
-  come up rather than deciding silently.
+- Sentence case in UI strings, not title case — capitalise the first word and
+  proper nouns, nothing else. Flag capitalisation choices as they come up
+  rather than deciding silently.
 - Grams for weight, never cups.
 - Markdown over .docx.
