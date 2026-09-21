@@ -9,9 +9,6 @@ This project doesn't use semantic versioning — the marketing version has staye
 ### added
 - new & noteable section in settings, listing what changed in each build
 
-### changed
-- headings and labels read in lowercase; capitals now start sentences only
-
 ### removed
 - refresh button on the main screen — opening the app already updates the reading
 
