@@ -3,8 +3,8 @@
 //  Furling
 //
 //  The app exists mainly to hold the HealthKit permission the widget relies
-//  on, so it stays deliberately thin: one number, a note about where that
-//  number came from, and a way to force a widget refresh.
+//  on, so it stays deliberately thin: one number and a note about where that
+//  number came from.
 //
 
 import SwiftUI
@@ -70,11 +70,6 @@ struct TodayView: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 32)
                 .frame(minHeight: 40)
-
-            Button("Refresh") {
-                Task { await load() }
-            }
-            .buttonStyle(.bordered)
 
             Text(buildLabel)
                 .font(.caption2)
