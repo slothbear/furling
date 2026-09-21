@@ -39,8 +39,17 @@ Name is a pun: furlong (distance unit) + the Furlings from Stargate.
   `NSHealthUpdateUsageDescription` even though the app never writes — upload
   validation demands it whenever the HealthKit entitlement is present.
 - `ITSAppUsesNonExemptEncryption` = Boolean NO, or every upload asks.
-- App icon must be 1024×1024 RGB with **no alpha channel**. Source SVG is in
-  `icon/`; render with cairosvg and `.convert('RGB')`.
+- App icon must be 1024×1024 RGB with **no alpha channel**. Source is
+  `icon/furling.svg`; run `icon/render.sh`, which rasterises with headless
+  Chrome and flattens with CoreGraphics. Both ship with the machine — cairosvg
+  was dropped because it drags in Homebrew's cairo for no gain.
+- The icon's hare is the system `hare.fill` symbol, the same one the widget
+  shows, rendered from SF Symbols at run time rather than kept in the repo.
+  Note Apple's SF Symbols licence does not permit symbols in app icons; this
+  is a deliberate exception for an app that never goes near review.
+- `render.sh` inlines the SVG into its page rather than loading it through an
+  `<img>` tag. An SVG embedded as an image runs in secure static mode, cannot
+  load `hare.png`, and the hare silently vanishes with no error.
 - Grouped `List` section headers uppercase by default. `.textCase(nil)` is
   what keeps "widget symbols" lowercase.
 - The App Store tab's icon slot stays a placeholder grid forever — it only

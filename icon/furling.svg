@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b6dcee"/>
+      <stop offset="1" stop-color="#e6f3f1"/>
+    </linearGradient>
+    <linearGradient id="field" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#74b25b"/>
+      <stop offset="1" stop-color="#3f7c3d"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1024" height="1024" fill="url(#sky)"/>
+
+  <circle cx="206" cy="198" r="146" fill="#f8e9a6" opacity="0.28"/>
+  <circle cx="206" cy="198" r="108" fill="#fbefb2" opacity="0.5"/>
+  <circle cx="206" cy="198" r="80" fill="#fdf5c8"/>
+
+  <path d="M0 596 C 80 556, 150 552, 214 580 C 268 544, 340 542, 396 576
+           C 452 540, 524 544, 572 582 C 628 548, 706 548, 758 584
+           C 812 552, 886 554, 936 586 C 968 568, 1000 566, 1024 578
+           L1024 640 L0 640 Z" fill="#6a9c68"/>
+
+  <rect x="0" y="614" width="1024" height="410" fill="url(#field)"/>
+
+  <ellipse cx="228" cy="664" rx="188" ry="38" fill="#a8d782" opacity="0.4" transform="rotate(-4 228 664)"/>
+  <ellipse cx="666" cy="638" rx="132" ry="26" fill="#bce392" opacity="0.32" transform="rotate(3 666 638)"/>
+  <ellipse cx="470" cy="762" rx="238" ry="44" fill="#a8d782" opacity="0.36" transform="rotate(-3 470 762)"/>
+  <ellipse cx="868" cy="716" rx="122" ry="28" fill="#bce392" opacity="0.28" transform="rotate(4 868 716)"/>
+  <ellipse cx="140" cy="884" rx="196" ry="40" fill="#a8d782" opacity="0.3" transform="rotate(-2 140 884)"/>
+  <ellipse cx="648" cy="930" rx="218" ry="42" fill="#bce392" opacity="0.24" transform="rotate(2 648 930)"/>
+  <ellipse cx="386" cy="634" rx="88" ry="18" fill="#2f6b38" opacity="0.2" transform="rotate(-3 386 634)"/>
+  <ellipse cx="806" cy="846" rx="118" ry="26" fill="#2f6b38" opacity="0.16" transform="rotate(3 806 846)"/>
+  <ellipse cx="262" cy="986" rx="150" ry="30" fill="#2f6b38" opacity="0.14"/>
+
+  <rect x="738" y="412" width="28" height="228" rx="8" fill="#8b9b96"/>
+  <rect x="598" y="96" width="310" height="334" rx="32" fill="#d0ddc2"/>
+  <rect x="598" y="96" width="310" height="334" rx="32" fill="none" stroke="#5d7a6a" stroke-width="13"/>
+  <text x="753" y="300" font-family="Helvetica, Arial, sans-serif" font-size="180" font-weight="700" fill="#22371e" text-anchor="middle">3.0</text>
+  <text x="753" y="384" font-family="Helvetica, Arial, sans-serif" font-size="80" font-weight="700" fill="#44604e" text-anchor="middle">mi</text>
+
+  <image href="hare.png" x="10" y="400" width="645" height="462"/>
+</svg>
