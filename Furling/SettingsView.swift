@@ -19,17 +19,17 @@ struct SettingsView: View {
                 Section {
                     LegendRow(
                         symbol: "hare",
-                        title: "Live reading",
+                        title: "live reading",
                         detail: "The number came from Apple Health. A zero here means you haven't walked yet today.\n\nLock screen widgets update on iOS's schedule, not Furling's, so the widget can trail a few minutes behind. Opening the app updates it right away. You can tap on the widget to open the app."
                     )
                     LegendRow(
                         symbol: "clock.arrow.circlepath",
-                        title: "Last known reading",
+                        title: "last known reading",
                         detail: "Apple Health couldn't be read, so this is the most recent reading from earlier today."
                     )
                     LegendRow(
                         symbol: "exclamationmark.triangle",
-                        title: "No reading",
+                        title: "no reading",
                         detail: "Apple Health returned an error. \n\nApple Health data can't be read until the phone has been unlocked once after a restart.\n\nIf the warning symbol persists, check Settings › Privacy & Security › Health › Furling and make sure Walking + Running Distance is enabled."
                     )
                 } header: {
