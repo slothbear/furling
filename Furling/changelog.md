@@ -1,13 +1,13 @@
 # changelog
 
-all notable changes to Furling are documented here, feeding the new & noteable section in settings.
+all notable changes to Furling are documented here, feeding the new & noteworthy section in settings.
 
 This project doesn't use semantic versioning — the marketing version has stayed 1.0 across every TestFlight build so far, so entries are keyed by build number instead.
 
 ## [build 4] - 2026-09-21
 
 ### added
-- new & noteable section in settings, listing what changed in each build
+- new & noteworthy section in settings, listing what changed in each build
 
 ### removed
 - refresh button on the main screen — opening the app already updates the reading

@@ -3,7 +3,7 @@
 //  Furling
 //
 //  Reads changelog.md out of the app bundle and turns it into entries for
-//  the "new & noteable" section in Settings. The markdown file is the
+//  the "new & noteworthy" section in Settings. The markdown file is the
 //  single source of truth — nothing here is hand-maintained.
 //
 

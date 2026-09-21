@@ -14,7 +14,7 @@ Name is a pun: furlong (distance unit) + the Furlings from Stargate.
   beside the lock screen date.
 - `DistanceStore.swift` — shared. **Must be in both target memberships.**
 - `Furling/changelog.md` — release notes, read at runtime by `Changelog.swift`
-  to build the "new & noteable" section in settings. **Has to stay inside
+  to build the "new & noteworthy" section in settings. **Has to stay inside
   `Furling/`**; the folder is a synchronized group, so anything in it is
   bundled automatically, and a copy at the repo root would not be.
 
@@ -49,10 +49,13 @@ Name is a pun: furlong (distance unit) + the Furlings from Stargate.
 
 ## Current state
 
-Build 3. Internal TestFlight group "kuniklaro". Working.
+Build 4 distributed, build 5 in progress. Internal TestFlight group
+"kuniklaro". Source lives at github.com/slothbear/furling, public, pushed over
+SSH; distribution builds are tagged `build_N` at the point they are uploaded,
+not when the number is bumped.
 
 Open threads:
-- The widget-lag note currently lives in the "Live reading" row of
+- The widget-lag note currently lives in the "live reading" row of
   `SettingsView`; it arguably belongs in the section footer, since it applies
   to all three states.
 - `Color.furlingBackground` is parked at the top of `TodayView.swift`. Wants
@@ -68,7 +71,7 @@ Open threads:
 - Settle on names *before* building anything — files, scripts, projects. He
   dislikes rework on names.
 - Capitals start sentences, and nothing else. A label, heading or fragment —
-  "live reading", "added", "build 3", "new & noteable" — stays lowercase, and
+  "live reading", "added", "build 3", "new & noteworthy" — stays lowercase, and
   only a full sentence gets its capital. Proper nouns keep theirs wherever
   they appear. System chrome is exempt — a navigation title or a standard
   button ("Settings", "Done", "Refresh") keeps the capital iOS gives it.

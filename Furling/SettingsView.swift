@@ -48,7 +48,7 @@ struct SettingsView: View {
                             ChangelogRow(entry: entry)
                         }
                     } header: {
-                        Text("new & noteable")
+                        Text("new & noteworthy")
                     }
                     .textCase(nil)
                 }
