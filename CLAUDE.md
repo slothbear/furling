@@ -13,6 +13,10 @@ Name is a pun: furlong (distance unit) + the Furlings from Stargate.
 - `FurlingWidget/` — widget extension. `.accessoryInline` only, the strip
   beside the lock screen date.
 - `DistanceStore.swift` — shared. **Must be in both target memberships.**
+- `Furling/changelog.md` — release notes, read at runtime by `Changelog.swift`
+  to build the "new & noteable" section in settings. **Has to stay inside
+  `Furling/`**; the folder is a synchronized group, so anything in it is
+  bundled automatically, and a copy at the repo root would not be.
 
 ## Decisions worth not relitigating
 
@@ -63,8 +67,11 @@ Open threads:
 - **Never use the word "just".**
 - Settle on names *before* building anything — files, scripts, projects. He
   dislikes rework on names.
-- Sentence case in UI strings, not title case — capitalise the first word and
-  proper nouns, nothing else. Flag capitalisation choices as they come up
-  rather than deciding silently.
+- Capitals start sentences, and nothing else. A label, heading or fragment —
+  "live reading", "added", "build 3", "new & noteable" — stays lowercase, and
+  only a full sentence gets its capital. Proper nouns keep theirs wherever
+  they appear. System chrome is exempt — a navigation title or a standard
+  button ("Settings", "Done", "Refresh") keeps the capital iOS gives it.
+  Flag capitalisation choices as they come up rather than deciding silently.
 - Grams for weight, never cups.
 - Markdown over .docx.

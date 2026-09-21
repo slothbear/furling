@@ -1,6 +1,6 @@
 # changelog
 
-all notable changes to Furling are documented here, feeding the new & noteworthy section in settings.
+all notable changes to Furling are documented here, feeding the new & noteable section in settings.
 
 This project doesn't use semantic versioning — the marketing version has stayed 1.0 across every TestFlight build so far, so entries are keyed by build number instead.
 

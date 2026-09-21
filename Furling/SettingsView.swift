@@ -13,6 +13,8 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
 
+    private let changelog = Changelog.load()
+
     var body: some View {
         NavigationStack {
             List {
@@ -39,6 +41,17 @@ struct SettingsView: View {
                 // Grouped lists uppercase section headers by default; this
                 // keeps "widget symbols" as written.
                 .textCase(nil)
+
+                if !changelog.isEmpty {
+                    Section {
+                        ForEach(changelog) { entry in
+                            ChangelogRow(entry: entry)
+                        }
+                    } header: {
+                        Text("new & noteable")
+                    }
+                    .textCase(nil)
+                }
             }
             .scrollContentBackground(.hidden)
             .background(Color.furlingBackground.ignoresSafeArea())
@@ -68,6 +81,37 @@ private struct LegendRow: View {
                 Text(detail)
                     .font(.footnote)
                     .foregroundStyle(.secondary)
+            }
+        }
+        .padding(.vertical, 4)
+    }
+}
+
+private struct ChangelogRow: View {
+    let entry: ChangelogEntry
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("build \(entry.id)")
+                Spacer()
+                Text(entry.date, format: .dateTime.day().month().year())
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+            ForEach(entry.categories) { category in
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(category.name)
+                        .font(.footnote.weight(.medium))
+                    ForEach(category.items, id: \.self) { item in
+                        HStack(alignment: .top, spacing: 6) {
+                            Text("•")
+                            Text(item)
+                        }
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                    }
+                }
             }
         }
         .padding(.vertical, 4)
