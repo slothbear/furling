@@ -4,6 +4,17 @@ all notable changes to Furling are documented here, feeding the new & noteable s
 
 This project doesn't use semantic versioning — the marketing version has stayed 1.0 across every TestFlight build so far, so entries are keyed by build number instead.
 
+## [build 4] - 2026-09-21
+
+### added
+- new & noteable section in settings, listing what changed in each build
+
+### changed
+- headings and labels read in lowercase; capitals now start sentences only
+
+### removed
+- refresh button on the main screen — opening the app already updates the reading
+
 ## [build 3] - 2026-09-09
 
 ### added
