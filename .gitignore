@@ -1,1 +1,24 @@
 *.swp
+.DS_Store
+
+# Xcode per-user state
+xcuserdata/
+*.xcuserstate
+
+# Build products
+build/
+DerivedData/
+*.ipa
+*.dSYM
+*.dSYM.zip
+
+# Signing material — never commit these
+*.p8
+*.p12
+*.cer
+*.certSigningRequest
+*.mobileprovision
+
+# Swift Package Manager
+.build/
+.swiftpm/
