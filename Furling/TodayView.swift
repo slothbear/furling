@@ -74,9 +74,10 @@ struct TodayView: View {
             Group {
                 if let yesterday, yesterday > 0 {
                     Text("yesterday " + String(format: "%.2f", yesterday))
-                        .font(.subheadline)
+                        .font(.caption)
                         .foregroundStyle(.tertiary)
                         .monospacedDigit()
+                        .padding(.top, 10)
                         .transition(.opacity)
                 }
             }
