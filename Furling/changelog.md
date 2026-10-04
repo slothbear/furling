@@ -4,18 +4,18 @@ All noteworthy changes to Furling are documented here, feeding the new & notewor
 
 This project doesn't use semantic versioning — the marketing version has stayed 1.0 across every TestFlight build so far, so entries are keyed by build number instead.
 
-## [build 5] - 2026-09-21
+## [build 5] - 2026-10-04
 
 ### added
-- a link in settings to the source code on GitHub, for the curious
 - yesterday's total under today's number, on days there's one to show
+- a link in settings to the source code on GitHub, for the curious
 
 ### changed
 - new app icon: the bunny from the widget, hopping in a sunlit (or moonlit) field
 
 ### fixed
-- the widget's last known reading now actually arrives — the app and the widget
-  had been caching to separate places and never saw each other's numbers
+- While the phone is locked, the widget now shows your last known reading.
+  Previously it may have displayed the warning symbol.
 
 ## [build 4] - 2026-09-21
 

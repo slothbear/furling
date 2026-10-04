@@ -12,6 +12,16 @@ is recorded in `changelog.md`.
 Intended for the build in progress. If this list stops being short it has
 stopped being true.
 
+- **Yesterday's total under today's number** on the app screen. Designed in a
+  chat session and never built, so it survives only as a description: a
+  general `DistanceStore.miles(from:to:)` query, with `milesToday()` wrapping
+  it and a `milesYesterday()` that returns nil on failure, so the line
+  disappears rather than asserting a zero.
+  *Settle first:* the comment above `cachedMiles()` says yesterday's mileage
+  would be worse than showing nothing. That's about a stale cache silently
+  standing in for today, not about a second labelled line — but the
+  distinction should be made on purpose rather than by accident.
+
 - **Correct build 5's changelog date before cutting.** The `## [build 5]`
   heading carries the day the section was opened, not the day it ships.
   *Why:* the date is the one part of an entry that is wrong by default.
@@ -29,6 +39,29 @@ gets an answer.
 ## open
 
 Started or half-decided, and unfinished.
+
+- **The widget's symbol reports provenance, not age.** `getTimeline` builds a
+  single entry and WidgetKit shows it until the next refresh lands, so the
+  symbol describes the moment that entry was generated rather than now. A hare
+  rendered at nine still shows a hare at noon with a three-hour-old number,
+  while a clock may be two minutes old and nearly right. The icon that looks
+  like it means stale actually means "came from the cache", and the one that
+  looks live is often the older of the two.
+  *Observed 2026-10-04:* opening the app forces a live render, and the hare
+  then persists across locking; a refresh landing while locked gives a clock
+  that persists after unlocking. Both behave as designed — the design is the
+  problem.
+  *Preferred fix:* have the timeline carry its own aging. Return several
+  entries instead of one — the reading now with the hare, the same number at
+  +20 minutes with the clock, later still with the warning. WidgetKit renders
+  future entries without waking the extension, which suits the real constraint
+  that refreshes are rationed.
+  *Alternatives:* bound the cache's age, which disciplines the clock but
+  leaves the hare just as capable of being hours stale; or change nothing and
+  reword the settings legend, which currently explains provenance accurately
+  and freshness not at all.
+  *Waiting on:* what Adam's tester actually sees day to day, which decides
+  whether this is a real annoyance or a purist's itch.
 
 - **Widget-lag note placement.** The note about lock screen widgets updating
   on iOS's schedule lives in the "live reading" row of `SettingsView`, but it

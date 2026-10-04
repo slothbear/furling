@@ -34,8 +34,10 @@ Name is a pun: furlong (distance unit) + the Furlings from Stargate.
   actually recurs: widget timeline refreshes landing while the phone sits
   locked. Before the first unlock after a reboot both are dark, so the warning
   triangle there is correct rather than a bug — nothing can produce a number.
-  (Locked-but-unlocked-since-boot is reasoned from the protection classes and
-  not yet confirmed on device.)
+  Confirmed on device 2026-10-04: with Require Passcode set to Immediately, a
+  locked phone's widget showed the clock symbol and the cached mileage, so iOS
+  does refresh lock screen widgets while the device is locked and protected
+  rather than deferring until unlock.
 - Inline widgets get one line, system font, one symbol, and a system-applied
   monochrome tint. Colour and font choices there are discarded.
 

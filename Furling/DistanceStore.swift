@@ -93,10 +93,13 @@ enum DistanceStore {
 
     // MARK: - Fallback cache
 
-    // HealthKit lives in protected storage. Between a reboot and the first
-    // unlock, queries fail outright. Stashing each successful reading in the
-    // shared App Group lets the widget show the last real number instead of
-    // a dash.
+    // HealthKit lives in protected storage and reads fail whenever the phone
+    // is locked, not only between a reboot and the first unlock. These
+    // defaults stay readable once the phone has been unlocked at least once
+    // since boot, so stashing each successful reading in the shared App Group
+    // covers the case that recurs all day: a widget timeline refresh landing
+    // while the phone sits locked. Before that first unlock both are dark and
+    // there is nothing to show.
 
     private static let milesKey = "cachedMiles"
     private static let stampKey = "cachedMilesDate"
