@@ -12,7 +12,7 @@ is recorded in `changelog.md`.
 Intended for the build in progress. If this list stops being short it has
 stopped being true.
 
-Nothing — build 5 is cut. Next cycle's items go here.
+Nothing — build 5 is tagged. Next cycle's items go here.
 
 ## decisions
 
