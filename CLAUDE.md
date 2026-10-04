@@ -63,15 +63,8 @@ Build 4 distributed, build 5 in progress. Internal TestFlight group
 SSH; distribution builds are tagged `build_N` at the point they are uploaded,
 not when the number is bumped.
 
-Open threads:
-- The widget-lag note currently lives in the "live reading" row of
-  `SettingsView`; it arguably belongs in the section footer, since it applies
-  to all three states.
-- `Color.furlingBackground` is parked at the top of `TodayView.swift`. Wants
-  its own file if a second colour appears.
-- A local archive-and-upload script was discussed but never written.
-  `xcodebuild archive` → `-exportArchive` with `destination: upload`, auth via
-  an App Store Connect API key `.p8`. Needs a name before it gets built.
+Open threads, ideas and anything noticed in passing live in `ideas.md`. Read
+it when picking up work; it is not loaded automatically the way this file is.
 
 ## Working with Adam
 
