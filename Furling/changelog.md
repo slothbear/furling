@@ -6,6 +6,9 @@ This project doesn't use semantic versioning — the marketing version has staye
 
 ## [build 6] - 2026-10-04
 
+### added
+- a candy corn on the main screen, filling a little more each day until Halloween
+
 ### changed
 - the app now stays upright, even when the phone is turned sideways
 

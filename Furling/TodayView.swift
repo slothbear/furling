@@ -20,6 +20,16 @@ extension Color {
             ? UIColor(red: 0.078, green: 0.094, blue: 0.114, alpha: 1)  // #14181D
             : UIColor(red: 0.953, green: 0.957, blue: 0.965, alpha: 1)  // #F3F4F6
     })
+
+    /// The orange for health errors. System orange is too faint on the soft
+    /// orange Halloween background, so light mode gets a burnt orange (about
+    /// 4.3:1 against that peach, 5:1 against the usual off-white). Dark mode
+    /// keeps the system's bright orange, which a darker one would lose against.
+    static let furlingWarning = Color(uiColor: UIColor { traits in
+        traits.userInterfaceStyle == .dark
+            ? UIColor.systemOrange
+            : UIColor(red: 0.65, green: 0.245, blue: 0.0, alpha: 1)  // #A63E00
+    })
 }
 
 struct TodayView: View {
@@ -29,6 +39,27 @@ struct TodayView: View {
     @State private var yesterday: Double?
     @State private var authProblem: String?
     @State private var showingSettings = false
+    @State private var burstStart: Date?
+    @State private var screenSize = CGSize.zero
+    /// Long-pressing the countdown caption pretends it is 31 October, so
+    /// Halloween can be tried out in advance. Left in the shipped app on
+    /// purpose, and not announced.
+    @State private var previewHalloween = false
+
+    /// Today, unless the caption has been long-pressed.
+    private var shownDate: Date {
+        if previewHalloween {
+            let calendar = Calendar.current
+            let year = calendar.component(.year, from: Date())
+            return calendar.date(from: DateComponents(year: year, month: 10, day: 31, hour: 12)) ?? Date()
+        }
+        return Date()
+    }
+
+    /// October gets the candy corn and a soft orange background.
+    private var isOctober: Bool {
+        OctoberOrnament.dayOfOctober(shownDate) != nil
+    }
 
     var body: some View {
         VStack(spacing: 8) {
@@ -85,6 +116,18 @@ struct TodayView: View {
 
             Spacer()
 
+            // In the stack rather than floating over it, so the two Spacers
+            // share whatever room is left and the number sits clear of the
+            // candy corn on any screen size. Present only in October.
+            if isOctober {
+                OctoberOrnamentView(
+                    date: shownDate,
+                    burstStart: burstStart,
+                    screen: screenSize,
+                    onCaptionLongPress: { previewHalloween.toggle() })
+                    .padding(.top, 8)
+            }
+
             status
                 .font(.footnote)
                 .multilineTextAlignment(.center)
@@ -98,14 +141,32 @@ struct TodayView: View {
                 .padding(.bottom, 24)
         }
         .frame(maxWidth: .infinity)
-        .background(Color.furlingBackground.ignoresSafeArea())
+        // The confetti spreads itself across this whole view, so it needs this
+        // view's size and a coordinate space to locate the candy corn within.
+        .coordinateSpace(name: OctoberOrnament.screenSpace)
+        .onGeometryChange(for: CGSize.self) { $0.size } action: { screenSize = $0 }
+        .background(
+            (isOctober ? Color.furlingOctoberBackground : Color.furlingBackground)
+                .ignoresSafeArea()
+        )
         .sheet(isPresented: $showingSettings) {
             SettingsView()
         }
-        .task { await begin() }
-        .onChange(of: scenePhase) { _, phase in
-            if phase == .active { Task { await load() } }
+        .task {
+            celebrate()
+            await begin()
         }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active {
+                celebrate()
+                Task { await load() }
+            }
+        }
+    }
+
+    /// Each time the app opens on Halloween, set off the burst.
+    private func celebrate() {
+        if OctoberOrnament.isHalloween(Date()) { burstStart = Date() }
     }
 
     /// Mirrors the widget's symbol vocabulary, with room here to explain.
@@ -115,7 +176,7 @@ struct TodayView: View {
         case .live:
             if let authProblem {
                 Label(authProblem, systemImage: "exclamationmark.triangle")
-                    .foregroundStyle(.orange)
+                    .foregroundStyle(Color.furlingWarning)
             }
         case .stale:
             Label("Showing the last reading from earlier today.",
@@ -124,7 +185,7 @@ struct TodayView: View {
         case .unavailable:
             Label("Can't read Health data right now. Unlock the phone, or check Settings › Privacy & Security › Health › Furling.",
                   systemImage: "exclamationmark.triangle")
-                .foregroundStyle(.orange)
+                .foregroundStyle(Color.furlingWarning)
         }
     }
 

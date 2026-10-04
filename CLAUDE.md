@@ -18,9 +18,22 @@ Name is a pun: furlong (distance unit) + the Furlings from Stargate.
   `Furling/`**; the folder is a synchronized group, so anything in it is
   bundled automatically, and a copy at the repo root would not be.
 
-- `FurlingTests/` — unit tests, currently only for `Changelog.parse`.
-  `Changelog.swift` is compiled into this target directly (the same way
-  `DistanceStore.swift` is shared with the widget), so there is no host app.
+- `Furling/OctoberOrnament.swift` — the candy corn on the main screen. Shown
+  only in October, by checking the date, so nothing needs removing afterwards
+  and it comes back every year. The main screen also gets a soft orange
+  background all month (`furlingOctoberBackground`), because the cream tip of
+  a candy corn vanishes on the usual off-white. One slice fills per day, 31 in
+  all. On Halloween, and only then, the wedge becomes touchable: a small candy
+  corn pulses in it after two idle seconds, a touch sets off confetti across
+  the whole screen, and it also bursts each time the app opens. Long-pressing
+  the caption pretends it is Halloween, so all of that can be tried before the
+  day. That is **in the shipped app on purpose**, as a hidden extra — it is
+  not announced in the changelog, so leave it out. The date logic is plain
+  functions so it can be tested.
+- `FurlingTests/` — unit tests for `Changelog.parse` and for the date logic in
+  `OctoberOrnament`. Both source files are compiled into this target directly
+  (the same way `DistanceStore.swift` is shared with the widget), so there is
+  no host app.
   Run with `xcodebuild test -project Furling.xcodeproj -scheme Furling
   -destination 'platform=iOS Simulator,name=iPhone 17'`, or Cmd-U in Xcode.
   One test reads the real `Furling/changelog.md` and fails if any build
@@ -96,9 +109,12 @@ it when picking up work; it is not loaded automatically the way this file is.
   Apple Health, HealthKit, GitHub, Furling, TestFlight. System chrome is exempt — a navigation title or a standard
   button ("Settings", "Done", "Refresh") keeps the capital iOS gives it.
   Flag capitalisation choices as they come up rather than deciding silently.
-- **Run the tests yourself.** He does not want to think about it. Run the
-  suite after any change to `Changelog.swift`, `changelog.md` or `FurlingTests/`,
-  and before saying a build is ready to tag. Report the result in a line;
-  say so plainly if a test fails rather than working around it.
+- **Run the tests yourself, but only when the changelog is involved.** He does
+  not want to think about it, and he does not want them run for anything else.
+  Run the suite after a change to `Changelog.swift` or `changelog.md`, and say
+  so in a line, plainly, if a test fails rather than working around it. Do not
+  run it for view, layout or ornament changes. (The suite also covers
+  `OctoberOrnament`'s date functions; whether an edit to those should trigger
+  a run has not been decided.)
 - Grams for weight, never cups.
 - Markdown over .docx.

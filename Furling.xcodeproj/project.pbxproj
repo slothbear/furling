@@ -69,6 +69,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Changelog.swift,
+				OctoberOrnament.swift,
 			);
 			target = 66B72E60302D4A0100DE1CBB /* FurlingTests */;
 		};
@@ -204,8 +205,6 @@
 				66B72E66302D4A0100DE1CBB /* Resources */,
 			);
 			buildRules = (
-			);
-			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
 				66B72E62302D4A0100DE1CBB /* FurlingTests */,
