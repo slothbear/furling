@@ -80,6 +80,11 @@ enum Changelog {
                 categoryName = String(line.dropFirst(4))
             } else if line.hasPrefix("- ") {
                 items.append(String(line.dropFirst(2)))
+            } else if !line.isEmpty, !items.isEmpty, rawLine.hasPrefix(" ") {
+                // An indented line under a bullet is that bullet wrapped, not
+                // a new one. Markdown reads it as one item and so should we —
+                // without this the tail of a long entry vanishes silently.
+                items[items.count - 1] += " " + line
             }
         }
         closeEntry()

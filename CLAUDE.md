@@ -67,7 +67,7 @@ Name is a pun: furlong (distance unit) + the Furlings from Stargate.
 
 ## Current state
 
-Build 4 distributed, build 5 in progress. Internal TestFlight group
+Build 5 distributed, build 6 in progress. Internal TestFlight group
 "kuniklaro". Source lives at github.com/slothbear/furling, public, pushed over
 SSH; distribution builds are tagged `build_N` at the point they are uploaded,
 not when the number is bumped.

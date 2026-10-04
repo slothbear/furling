@@ -139,7 +139,13 @@ private struct ChangelogRow: View {
                     ForEach(category.items, id: \.self) { item in
                         HStack(alignment: .top, spacing: 6) {
                             Text("•")
+                            // Inside an HStack a Text will compress and
+                            // truncate before it wraps. fixedSize makes it
+                            // claim the height it needs instead, which is
+                            // what keeps longer entries readable at larger
+                            // Dynamic Type sizes.
                             Text(item)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
                         .font(.footnote)
                         .foregroundStyle(.secondary)

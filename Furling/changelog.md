@@ -4,6 +4,11 @@ All noteworthy changes to Furling are documented here, feeding the new & notewor
 
 This project doesn't use semantic versioning — the marketing version has stayed 1.0 across every TestFlight build so far, so entries are keyed by build number instead.
 
+## [build 6] - 2026-10-04
+
+### fixed
+- longer entries in this list now show in full, instead of being cut short
+
 ## [build 5] - 2026-10-04
 
 ### added
