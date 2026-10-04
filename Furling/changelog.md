@@ -6,6 +6,9 @@ This project doesn't use semantic versioning — the marketing version has staye
 
 ## [build 6] - 2026-10-04
 
+### changed
+- the app now stays upright, even when the phone is turned sideways
+
 ### fixed
 - longer entries in this list now show in full, instead of being cut short
 
