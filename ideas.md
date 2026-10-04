@@ -12,19 +12,7 @@ is recorded in `changelog.md`.
 Intended for the build in progress. If this list stops being short it has
 stopped being true.
 
-- **Yesterday's total under today's number** on the app screen. Designed in a
-  chat session and never built, so it survives only as a description: a
-  general `DistanceStore.miles(from:to:)` query, with `milesToday()` wrapping
-  it and a `milesYesterday()` that returns nil on failure, so the line
-  disappears rather than asserting a zero.
-  *Settle first:* the comment above `cachedMiles()` says yesterday's mileage
-  would be worse than showing nothing. That's about a stale cache silently
-  standing in for today, not about a second labelled line — but the
-  distinction should be made on purpose rather than by accident.
-
-- **Correct build 5's changelog date before cutting.** The `## [build 5]`
-  heading carries the day the section was opened, not the day it ships.
-  *Why:* the date is the one part of an entry that is wrong by default.
+Nothing — build 5 is cut. Next cycle's items go here.
 
 ## decisions
 
