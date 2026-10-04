@@ -13,6 +13,10 @@ This project doesn't use semantic versioning — the marketing version has staye
 ### changed
 - new app icon: the bunny from the widget, hopping in a sunlit (or moonlit) field
 
+### fixed
+- the widget's last known reading now actually arrives — the app and the widget
+  had been caching to separate places and never saw each other's numbers
+
 ## [build 4] - 2026-09-21
 
 ### added

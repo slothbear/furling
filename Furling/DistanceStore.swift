@@ -12,9 +12,12 @@ import HealthKit
 
 enum DistanceStore {
 
-    /// Must match the App Group you create in Signing & Capabilities,
-    /// on both targets.
-    static let appGroup = "group.com.yourname.furling"
+    /// Must match the App Group in Signing & Capabilities on both targets,
+    /// and the identifier in both .entitlements files. A mismatch fails
+    /// silently: `UserDefaults(suiteName:)` still hands back a store, but it
+    /// is the process's own, so the app and the widget never see each other's
+    /// writes and the cached reading never arrives.
+    static let appGroup = "group.com.morganthall.furling"
 
     private static let healthStore = HKHealthStore()
     private static let distanceType = HKQuantityType(.distanceWalkingRunning)
