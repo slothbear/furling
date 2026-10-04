@@ -18,6 +18,14 @@ Name is a pun: furlong (distance unit) + the Furlings from Stargate.
   `Furling/`**; the folder is a synchronized group, so anything in it is
   bundled automatically, and a copy at the repo root would not be.
 
+- `FurlingTests/` — unit tests, currently only for `Changelog.parse`.
+  `Changelog.swift` is compiled into this target directly (the same way
+  `DistanceStore.swift` is shared with the widget), so there is no host app.
+  Run with `xcodebuild test -project Furling.xcodeproj -scheme Furling
+  -destination 'platform=iOS Simulator,name=iPhone 17'`, or Cmd-U in Xcode.
+  One test reads the real `Furling/changelog.md` and fails if any build
+  heading in it is silently dropped.
+
 ## Decisions worth not relitigating
 
 - **Distance is read directly from HealthKit** (`distanceWalkingRunning`),
@@ -88,5 +96,9 @@ it when picking up work; it is not loaded automatically the way this file is.
   Apple Health, HealthKit, GitHub, Furling, TestFlight. System chrome is exempt — a navigation title or a standard
   button ("Settings", "Done", "Refresh") keeps the capital iOS gives it.
   Flag capitalisation choices as they come up rather than deciding silently.
+- **Run the tests yourself.** He does not want to think about it. Run the
+  suite after any change to `Changelog.swift`, `changelog.md` or `FurlingTests/`,
+  and before saying a build is ready to tag. Report the result in a line;
+  say so plainly if a test fails rather than working around it.
 - Grams for weight, never cups.
 - Markdown over .docx.

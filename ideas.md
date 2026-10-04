@@ -14,6 +14,17 @@ stopped being true.
 
 Nothing — build 5 is tagged. Next cycle's items go here.
 
+- **Tests for the changelog parser.** `Changelog.parse` is the only pure logic
+  in the project — string in, values out, no simulator needed — and it has
+  produced two silent failures so far: the original design dropped a build
+  with no categories, and until build 6 it discarded wrapped continuation
+  lines, which had already swallowed half of a real entry before anyone
+  noticed. *Why it earns a test and nothing else does:* it fails by going
+  quiet rather than by crashing, so nothing tells you it broke.
+  *Cases worth pinning:* a bullet wrapped over two lines, a section with no
+  bullets, a malformed or missing date, builds listed out of order, and the
+  preamble prose that must stay ignored.
+
 ## decisions
 
 Blocked on a choice rather than on effort — nothing here can start until it
