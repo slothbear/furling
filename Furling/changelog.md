@@ -8,6 +8,7 @@ This project doesn't use semantic versioning — the marketing version has staye
 
 ### added
 - a link in settings to the source code on GitHub, for the curious
+- yesterday's total under today's number, on days there's one to show
 
 ### changed
 - new app icon: the bunny from the widget, hopping in a sunlit (or moonlit) field

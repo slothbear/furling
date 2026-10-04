@@ -26,6 +26,7 @@ struct TodayView: View {
     @Environment(\.scenePhase) private var scenePhase
 
     @State private var reading: DistanceStore.Reading = .live(0)
+    @State private var yesterday: Double?
     @State private var authProblem: String?
     @State private var showingSettings = false
 
@@ -62,6 +63,24 @@ struct TodayView: View {
             Text("miles walked")
                 .font(.title3)
                 .foregroundStyle(.secondary)
+
+            // No unit here — "miles walked" directly above already says it.
+            //
+            // Zero is hidden as well as nil. HealthKit answers an unauthorised
+            // or empty read with "no data", which the query treats as a real
+            // zero — correct for today, but for yesterday it can't be told
+            // apart from a day you genuinely didn't walk. Rather than assert
+            // either, say nothing.
+            Group {
+                if let yesterday, yesterday > 0 {
+                    Text("yesterday " + String(format: "%.2f", yesterday))
+                        .font(.subheadline)
+                        .foregroundStyle(.tertiary)
+                        .monospacedDigit()
+                        .transition(.opacity)
+                }
+            }
+            .animation(.default, value: yesterday)
 
             Spacer()
 
@@ -129,6 +148,7 @@ struct TodayView: View {
 
     private func load() async {
         reading = await DistanceStore.reading()
+        yesterday = await DistanceStore.milesYesterday()
         WidgetCenter.shared.reloadAllTimelines()
     }
 }

@@ -32,20 +32,19 @@ enum DistanceStore {
 
     // MARK: - Reading
 
-    /// Walking + running distance since midnight, in miles.
+    /// Walking + running distance over a span, in miles.
     ///
     /// This is HealthKit's own distance figure, derived from GPS and the
     /// motion coprocessor's stride estimate. It is not steps multiplied by an
     /// assumed stride length, and it will not match that calculation.
-    static func milesToday() async throws -> Double {
-        let start = Calendar.current.startOfDay(for: Date())
+    static func miles(from start: Date, to end: Date) async throws -> Double {
         let predicate = HKQuery.predicateForSamples(
             withStart: start,
-            end: Date(),
+            end: end,
             options: .strictStartDate
         )
 
-        let miles: Double = try await withCheckedThrowingContinuation { continuation in
+        return try await withCheckedThrowingContinuation { continuation in
             let query = HKStatisticsQuery(
                 quantityType: distanceType,
                 quantitySamplePredicate: predicate,
@@ -53,8 +52,8 @@ enum DistanceStore {
             ) { _, statistics, error in
                 if let error {
                     // HealthKit reports "no data" as an error rather than an
-                    // empty sum. That's still a legitimate zero — nobody's
-                    // walked yet today — not a read failure.
+                    // empty sum. That's still a legitimate zero — nobody
+                    // walked in that span — not a read failure.
                     if let hkError = error as? HKError, hkError.code == .errorNoData {
                         continuation.resume(returning: 0)
                         return
@@ -62,15 +61,31 @@ enum DistanceStore {
                     continuation.resume(throwing: error)
                     return
                 }
-                // No samples yet today is a legitimate zero, not an error.
+                // No samples in the span is a legitimate zero, not an error.
                 let value = statistics?.sumQuantity()?.doubleValue(for: .mile()) ?? 0
                 continuation.resume(returning: value)
             }
             healthStore.execute(query)
         }
+    }
 
+    /// Distance since midnight. The only reading that gets cached, since the
+    /// cache exists to stand in for today.
+    static func milesToday() async throws -> Double {
+        let miles = try await miles(from: Calendar.current.startOfDay(for: Date()), to: Date())
         cache(miles)
         return miles
+    }
+
+    /// Yesterday's total, or nil if it couldn't be read. Nil rather than zero
+    /// so the caller can drop the line entirely — a zero here would claim you
+    /// didn't walk yesterday, which isn't what a failed read means.
+    static func milesYesterday() async -> Double? {
+        let calendar = Calendar.current
+        let startOfToday = calendar.startOfDay(for: Date())
+        guard let startOfYesterday = calendar.date(byAdding: .day, value: -1, to: startOfToday)
+        else { return nil }
+        return try? await miles(from: startOfYesterday, to: startOfToday)
     }
 
     // MARK: - Fallback cache
