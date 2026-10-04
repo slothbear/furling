@@ -102,6 +102,23 @@ works live in CLAUDE.md instead; these are the ones about what to do.
   alone beat the hare plus mile marker, which turned illegible at 60pt — worth
   knowing if this ever comes back.
 
+- **An arrow or delta comparing today against yesterday.** Both numbers are
+  already on the screen, and two readers who can subtract do not need the app
+  to do it for them. Declined on 2026-10-04.
+  *Worth keeping if it returns:* the comparison has to be like for like —
+  today so far against yesterday up to this same time — or it points down all
+  morning and means nothing. `DistanceStore.miles(from:to:)` already takes an
+  arbitrary span, so that version costs little.
+
+- **A local archive-and-upload script.** `xcodebuild archive` →
+  `-exportArchive` with `destination: upload`, authenticating with an App
+  Store Connect API key `.p8`. Discussed across several sessions and never
+  built, blocked only on wanting a name first. Declined on 2026-10-04: at a
+  build every few weeks, Xcode's own flow is enough, and automating it would
+  mean keeping an API key on disk to save a few minutes a month. If the
+  cadence ever picks up, this is the first thing to reconsider — the shape of
+  it was never the problem.
+
 - **GitHub Issues for this list.** A browser round-trip and ceremony for an
   app with two users; `gh` isn't installed, so it can't be read or written
   from a session without a token; and the repository is public, so half-formed
