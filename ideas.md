@@ -12,11 +12,6 @@ is recorded in `changelog.md`.
 Intended for the build in progress. If this list stops being short it has
 stopped being true.
 
-- **Fill the tinted icon variant.** `Contents.json` declares the slot but
-  leaves it empty, so iOS derives one by desaturating the light icon.
-  *Why now:* `icon/render.sh` already renders two variants, so a third is
-  mostly a colour decision rather than work.
-
 - **Correct build 5's changelog date before cutting.** The `## [build 5]`
   heading carries the day the section was opened, not the day it ships.
   *Why:* the date is the one part of an entry that is wrong by default.
@@ -64,6 +59,17 @@ works live in CLAUDE.md instead; these are the ones about what to do.
   and widget extension — a lot of duplicated signing setup for a two-person
   app. The build number on the main screen tells you which one is installed,
   which covers the actual need.
+- **A hand-drawn tinted icon variant.** `Contents.json` leaves the tinted slot
+  empty, so iOS derives one from the light icon by mapping its luminance onto
+  the user's tint. Tried on device across several tints and it holds up — a
+  dark hare against a bright sky is already the high-contrast silhouette that
+  tinting wants. A custom variant would also have cost `render.sh` a
+  per-variant exception to the alpha-flattening rule, since a tinted icon
+  needs transparency while the primary icon must not have it. Permanent
+  complexity for a marginal gain. Candidates were built and compared: the hare
+  alone beat the hare plus mile marker, which turned illegible at 60pt — worth
+  knowing if this ever comes back.
+
 - **GitHub Issues for this list.** A browser round-trip and ceremony for an
   app with two users; `gh` isn't installed, so it can't be read or written
   from a session without a token; and the repository is public, so half-formed
