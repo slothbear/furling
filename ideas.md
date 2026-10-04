@@ -12,8 +12,6 @@ is recorded in `changelog.md`.
 Intended for the build in progress. If this list stops being short it has
 stopped being true.
 
-- Add link to the GitHub repository in Settings.
-
 - **Fill the tinted icon variant.** `Contents.json` declares the slot but
   leaves it empty, so iOS derives one by desaturating the light icon.
   *Why now:* `icon/render.sh` already renders two variants, so a third is

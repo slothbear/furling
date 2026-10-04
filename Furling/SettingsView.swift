@@ -12,12 +12,16 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.openURL) private var openURL
+
+    private static let repository = URL(string: "https://github.com/slothbear/furling")!
 
     private let changelog = Changelog.load()
 
     var body: some View {
         NavigationStack {
             List {
+
                 Section {
                     LegendRow(
                         symbol: "hare",
@@ -52,6 +56,35 @@ struct SettingsView: View {
                     }
                     .textCase(nil)
                 }
+
+
+                Section {
+                    // A Link tints its whole label, which would drag the URL
+                    // line blue along with the title. A plain button keeps the
+                    // row looking like the legend rows above it.
+                    Button {
+                        openURL(Self.repository)
+                    } label: {
+                        HStack(alignment: .top, spacing: 16) {
+                            Image(systemName: "chevron.left.forwardslash.chevron.right")
+                                .font(.title3)
+                                .frame(width: 30)
+                                .foregroundStyle(.tint)
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("source on GitHub")
+                                    .foregroundStyle(.tint)
+                                Text("github.com/slothbear/furling")
+                                    .font(.footnote)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                        .padding(.vertical, 4)
+                    }
+                    .buttonStyle(.plain)
+                } header: {
+                    Text("source")
+                }
+                .textCase(nil)
             }
             .scrollContentBackground(.hidden)
             .background(Color.furlingBackground.ignoresSafeArea())

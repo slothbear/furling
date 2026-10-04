@@ -1,10 +1,13 @@
 # changelog
 
-all notable changes to Furling are documented here, feeding the new & noteworthy section in settings.
+All noteworthy changes to Furling are documented here, feeding the new & noteworthy section in settings.
 
 This project doesn't use semantic versioning — the marketing version has stayed 1.0 across every TestFlight build so far, so entries are keyed by build number instead.
 
 ## [build 5] - 2026-09-21
+
+### added
+- a link in settings to the source code on GitHub, for the curious
 
 ### changed
 - new app icon: the bunny from the widget, hopping in a sunlit (or moonlit) field
