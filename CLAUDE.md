@@ -27,8 +27,15 @@ Name is a pun: furlong (distance unit) + the Furlings from Stargate.
   in all three cases and signals the state through the SF Symbol instead:
   `hare` / `clock.arrow.circlepath` / `exclamationmark.triangle`.
   A placeholder zero must never look like a measured zero.
-- **App Group `UserDefaults`** caches the last good reading, because HealthKit
-  is unreadable between a reboot and the first unlock.
+- **App Group `UserDefaults`** caches the last good reading. HealthKit's store
+  is protected and reads fail **whenever the phone is locked**, not only
+  between a reboot and the first unlock. The cache is readable once the phone
+  has been unlocked at least once since boot, so it covers the case that
+  actually recurs: widget timeline refreshes landing while the phone sits
+  locked. Before the first unlock after a reboot both are dark, so the warning
+  triangle there is correct rather than a bug — nothing can produce a number.
+  (Locked-but-unlocked-since-boot is reasoned from the protection classes and
+  not yet confirmed on device.)
 - Inline widgets get one line, system font, one symbol, and a system-applied
   monochrome tint. Colour and font choices there are discarded.
 
@@ -72,10 +79,11 @@ it when picking up work; it is not loaded automatically the way this file is.
 - **Never use the word "just".**
 - Settle on names *before* building anything — files, scripts, projects. He
   dislikes rework on names.
-- Capitals start sentences, and nothing else. A label, heading or fragment —
-  "live reading", "added", "build 3", "new & noteworthy" — stays lowercase, and
-  only a full sentence gets its capital. Proper nouns keep theirs wherever
-  they appear. System chrome is exempt — a navigation title or a standard
+- Capitals start sentences and proper names, nothing else. A label, heading or
+  fragment — "live reading", "added", "build 3", "new & noteworthy" — stays
+  lowercase, and only a full sentence gets its capital. Names keep their
+  capitals wherever they fall, including inside an otherwise lowercase label:
+  Apple Health, HealthKit, GitHub, Furling, TestFlight. System chrome is exempt — a navigation title or a standard
   button ("Settings", "Done", "Refresh") keeps the capital iOS gives it.
   Flag capitalisation choices as they come up rather than deciding silently.
 - Grams for weight, never cups.
