@@ -4,7 +4,7 @@ All noteworthy changes to Furling are documented here, feeding the new & notewor
 
 This project doesn't use semantic versioning — the marketing version has stayed 1.0 across every TestFlight build so far, so entries are keyed by build number instead.
 
-## [build 6] - 2026-10-04
+## [build 6] - 2026-10-07
 
 ### added
 - a candy corn on the main screen, filling a little more each day until Halloween
