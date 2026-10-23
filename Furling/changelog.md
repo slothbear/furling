@@ -6,6 +6,9 @@ This project doesn't use semantic versioning — the marketing version has staye
 
 ## [build 7] - 2026-10-23
 
+### changed
+- this list now shows only the latest build, with earlier ones a tap away
+
 ### fixed
 - the widget now stays current while the phone is locked, instead of showing an old number or a warning
 

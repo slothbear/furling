@@ -46,10 +46,15 @@ struct SettingsView: View {
                 // keeps "widget symbols" as written.
                 .textCase(nil)
 
-                if !changelog.isEmpty {
+                // Only the newest build here; the rest are a tap away, so the
+                // screen doesn't grow by a build every few weeks.
+                if let latest = changelog.first {
                     Section {
-                        ForEach(changelog) { entry in
-                            ChangelogRow(entry: entry)
+                        ChangelogRow(entry: latest)
+                        if changelog.count > 1 {
+                            NavigationLink("earlier builds") {
+                                EarlierBuildsView(entries: Array(changelog.dropFirst()))
+                            }
                         }
                     } header: {
                         Text("new & noteworthy")
@@ -117,6 +122,26 @@ private struct LegendRow: View {
             }
         }
         .padding(.vertical, 4)
+    }
+}
+
+/// Every build but the newest, newest first, in the same rows the settings
+/// screen uses.
+private struct EarlierBuildsView: View {
+    let entries: [ChangelogEntry]
+
+    var body: some View {
+        List {
+            Section {
+                ForEach(entries) { entry in
+                    ChangelogRow(entry: entry)
+                }
+            }
+        }
+        .scrollContentBackground(.hidden)
+        .background(Color.furlingBackground.ignoresSafeArea())
+        .navigationTitle("Earlier Builds")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
