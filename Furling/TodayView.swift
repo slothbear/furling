@@ -205,6 +205,7 @@ struct TodayView: View {
         } catch {
             authProblem = error.localizedDescription
         }
+        await DistanceStore.requestMotionAuthorization()
         await load()
     }
 

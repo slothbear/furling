@@ -26,17 +26,17 @@ struct SettingsView: View {
                     LegendRow(
                         symbol: "hare",
                         title: "live reading",
-                        detail: "The number came from Apple Health. A zero here means you haven't walked yet today.\n\nLock screen widgets update on iOS's schedule, not Furling's, so the widget can trail a few minutes behind. Opening the app updates it right away. You can tap on the widget to open the app."
+                        detail: "The number is current. It comes from Apple Health, or from iPhone's motion sensor while the phone is locked, which doesn't count walks taken with only an Apple Watch. A zero here means you haven't walked yet today.\n\nLock screen widgets update on iOS's schedule, not Furling's, so the widget can trail a few minutes behind. Opening the app updates it right away. You can tap on the widget to open the app."
                     )
                     LegendRow(
                         symbol: "clock.arrow.circlepath",
                         title: "last known reading",
-                        detail: "Apple Health couldn't be read, so this is the most recent reading from earlier today."
+                        detail: "Neither Apple Health nor the motion sensor could be read, so this is the most recent reading from earlier today."
                     )
                     LegendRow(
                         symbol: "exclamationmark.triangle",
                         title: "no reading",
-                        detail: "Apple Health returned an error. \n\nApple Health data can't be read until the phone has been unlocked once after a restart.\n\nIf the warning symbol persists, check Settings › Privacy & Security › Health › Furling and make sure Walking + Running Distance is enabled."
+                        detail: "Neither Apple Health nor the motion sensor could be read, and there's no earlier reading from today.\n\nApple Health data can't be read until the phone has been unlocked once after a restart.\n\nIf the warning symbol persists, check Settings › Privacy & Security › Health › Furling and make sure Walking + Running Distance is enabled, and that Motion & Fitness is on for Furling."
                     )
                 } header: {
                     Text("widget symbols")

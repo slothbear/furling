@@ -45,8 +45,14 @@ Started or half-decided, and unfinished.
   leaves the hare just as capable of being hours stale; or change nothing and
   reword the settings legend, which currently explains provenance accurately
   and freshness not at all.
-  *Waiting on:* what Adam's tester actually sees day to day, which decides
-  whether this is a real annoyance or a purist's itch.
+  *Answered 2026-10-22:* the tester "seldom sees the current mileage on the
+  lock screen", usually with the clock and sometimes the triangle, while
+  other pedometer apps' widgets keep updating. Adam saw the same once he
+  turned Face ID on. So it is a real problem, but the cause is deeper than
+  this entry assumed: HealthKit is unreadable on a locked phone, so the
+  widget is almost never live. Making staleness honest would not fix that.
+  The candidate fix is reading `CMPedometer` while locked, which goes against
+  the founding HealthKit-only decision and needs Adam's call.
 
 - **Widget-lag note placement.** The note about lock screen widgets updating
   on iOS's schedule lives in the "live reading" row of `SettingsView`, but it

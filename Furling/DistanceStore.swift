@@ -7,6 +7,7 @@
 //  right, and tick both boxes under "Target Membership".
 //
 
+import CoreMotion
 import Foundation
 import HealthKit
 
@@ -31,6 +32,15 @@ enum DistanceStore {
             throw DistanceError.healthUnavailable
         }
         try await healthStore.requestAuthorization(toShare: [], read: [distanceType])
+    }
+
+    /// Asks once for Motion & Fitness access, which the pedometer fallback
+    /// needs. Only the app can show the prompt — the widget relies on the
+    /// answer given here — and the first query is what triggers it.
+    static func requestMotionAuthorization() async {
+        guard CMPedometer.isDistanceAvailable(),
+              CMPedometer.authorizationStatus() == .notDetermined else { return }
+        _ = try? await pedometerMilesToday()
     }
 
     // MARK: - Reading
@@ -128,7 +138,8 @@ enum DistanceStore {
     /// What the display is actually showing, so the UI can be honest about
     /// where the number came from.
     enum Reading: Equatable {
-        /// HealthKit answered. Zero here is a real zero.
+        /// A current number: HealthKit answered, or — while the phone is
+        /// locked — the pedometer did. Zero here is a real zero.
         case live(Double)
         /// The query failed; this is the last good value from earlier today.
         case stale(Double)
@@ -143,13 +154,52 @@ enum DistanceStore {
         }
     }
 
-    /// Never throws. Degrades from live, to cached, to zero.
+    /// Never throws. Degrades from HealthKit, to the pedometer, to the cache,
+    /// to zero.
     static func reading() async -> Reading {
         do {
             return .live(try await milesToday())
         } catch {
+            // HealthKit is unreadable whenever the phone is locked, which is
+            // when most widget refreshes land. The pedometer is not.
+            if let pedometer = try? await pedometerMilesToday() {
+                // Never go backwards. The pedometer counts iPhone only, so it
+                // can sit below a Health total cached earlier today that
+                // included Apple Watch miles; today's distance only grows.
+                let miles = max(pedometer, cachedMiles() ?? 0)
+                cache(miles)
+                return .live(miles)
+            }
             if let cached = cachedMiles() { return .stale(cached) }
             return .unavailable
+        }
+    }
+
+    // MARK: - Pedometer fallback
+
+    private static let pedometer = CMPedometer()
+
+    /// Today's distance from iPhone's motion coprocessor, in miles. Readable
+    /// while the phone is locked, which HealthKit is not. It is the
+    /// pedometer's own distance estimate rather than steps × stride, but it
+    /// is iPhone-only: walks recorded by an Apple Watch alone are missing.
+    static func pedometerMilesToday() async throws -> Double {
+        guard CMPedometer.isDistanceAvailable() else {
+            throw DistanceError.pedometerUnavailable
+        }
+        let start = Calendar.current.startOfDay(for: Date())
+        return try await withCheckedThrowingContinuation { continuation in
+            pedometer.queryPedometerData(from: start, to: Date()) { data, error in
+                if let error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+                guard let meters = data?.distance?.doubleValue else {
+                    continuation.resume(throwing: DistanceError.pedometerUnavailable)
+                    return
+                }
+                continuation.resume(returning: meters / 1609.344)
+            }
         }
     }
 
@@ -163,11 +213,14 @@ enum DistanceStore {
 
 enum DistanceError: LocalizedError {
     case healthUnavailable
+    case pedometerUnavailable
 
     var errorDescription: String? {
         switch self {
         case .healthUnavailable:
             return "This device doesn't provide Health data."
+        case .pedometerUnavailable:
+            return "The motion sensor's distance isn't available."
         }
     }
 }

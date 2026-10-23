@@ -4,6 +4,11 @@ All noteworthy changes to Furling are documented here, feeding the new & notewor
 
 This project doesn't use semantic versioning — the marketing version has stayed 1.0 across every TestFlight build so far, so entries are keyed by build number instead.
 
+## [build 7] - 2026-10-23
+
+### fixed
+- the widget now stays current while the phone is locked, instead of showing an old number or a warning
+
 ## [build 6] - 2026-10-07
 
 ### added

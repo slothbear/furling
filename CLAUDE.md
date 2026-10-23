@@ -41,10 +41,20 @@ Name is a pun: furlong (distance unit) + the Furlings from Stargate.
 
 ## Decisions worth not relitigating
 
-- **Distance is read directly from HealthKit** (`distanceWalkingRunning`),
-  never derived from steps × stride. This was the founding requirement.
-- **`DistanceStore.Reading`** is a three-state enum: `.live`, `.stale`
-  (cached from earlier today), `.unavailable`. The widget shows a real number
+- **Distance is read from HealthKit** (`distanceWalkingRunning`) whenever it
+  can be, and never derived from steps × stride. That was the founding
+  requirement. **Revised 2026-10-22:** HealthKit is unreadable whenever the
+  phone is locked, so on a phone with Face ID the widget was almost never
+  current — the one tester "seldom" saw a live number. When HealthKit fails,
+  `DistanceStore.reading()` now asks `CMPedometer` for today's distance: the
+  motion coprocessor's own estimate, readable while locked. It is iPhone-only
+  (no Apple Watch miles), so the fallback never reports less than the total
+  already cached today. Needs Motion & Fitness permission, requested by the
+  app; `NSMotionUsageDescription` is set on both targets. Confirmed on device
+  2026-10-23 with Face ID on: the locked widget stays current.
+- **`DistanceStore.Reading`** is a three-state enum: `.live` (HealthKit, or
+  the pedometer while locked), `.stale` (cached from earlier today),
+  `.unavailable`. The widget shows a real number
   in all three cases and signals the state through the SF Symbol instead:
   `hare` / `clock.arrow.circlepath` / `exclamationmark.triangle`.
   A placeholder zero must never look like a measured zero.
@@ -88,7 +98,7 @@ Name is a pun: furlong (distance unit) + the Furlings from Stargate.
 
 ## Current state
 
-Build 5 distributed, build 6 in progress. Internal TestFlight group
+Build 6 distributed, build 7 in progress. Internal TestFlight group
 "kuniklaro". Source lives at github.com/slothbear/furling, public, pushed over
 SSH; distribution builds are tagged `build_N` at the point they are uploaded,
 not when the number is bumped.
