@@ -32,36 +32,25 @@ struct SettingsView: View {
         NavigationStack {
             List {
                 // Which build this is, at the top where a tester looks first
-                // when asked. Plain text on the screen's own background
-                // rather than a row in a box.
+                // when asked.
                 Section {
                     Text(Self.buildLabel)
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
                         .frame(maxWidth: .infinity)
-                        .listRowBackground(Color.clear)
                 }
+                .listSectionSpacing(.compact)
 
+                // The symbols with their names only; the full explanations
+                // are a tap away, the same way earlier builds are.
                 Section {
-                    LegendRow(
-                        symbol: "hare",
-                        title: "live reading",
-                        detail: "The number is current. It comes from Apple Health, or from iPhone's motion sensor while the phone is locked, which doesn't count walks taken with only an Apple Watch. A zero here means you haven't walked yet today.\n\nLock screen widgets update on iOS's schedule, not Furling's, so the widget can trail a few minutes behind. Opening the app updates it right away. You can tap on the widget to open the app."
-                    )
-                    LegendRow(
-                        symbol: "clock.arrow.circlepath",
-                        title: "last known reading",
-                        detail: "Neither Apple Health nor the motion sensor could be read, so this is the most recent reading from earlier today."
-                    )
-                    LegendRow(
-                        symbol: "exclamationmark.triangle",
-                        title: "no reading",
-                        detail: "Neither Apple Health nor the motion sensor could be read, and there's no earlier reading from today.\n\nApple Health data can't be read until the phone has been unlocked once after a restart.\n\nIf the warning symbol persists, check Settings › Privacy & Security › Health › Furling and make sure Walking + Running Distance is enabled, and that Motion & Fitness is on for Furling."
-                    )
+                    ForEach(widgetSymbols) { symbol in
+                        CompactSymbolRow(symbol: symbol)
+                    }
+                    NavigationLink("what they mean") {
+                        WidgetSymbolsView()
+                    }
                 } header: {
                     Text("widget symbols")
                 }
-                
                 // Grouped lists uppercase section headers by default; this
                 // keeps "widget symbols" as written.
                 .textCase(nil)
@@ -121,6 +110,60 @@ struct SettingsView: View {
                 }
             }
         }
+    }
+}
+
+/// The widget's three symbols and what each means, shared by the short list
+/// in settings and the full explanations behind it.
+fileprivate struct WidgetSymbol: Identifiable {
+    let symbol: String
+    let title: String
+    let detail: String
+    var id: String { symbol }
+}
+
+fileprivate let widgetSymbols: [WidgetSymbol] = [
+    WidgetSymbol(
+        symbol: "hare",
+        title: "live reading",
+        detail: "The number is current. It comes from Apple Health, or from iPhone's motion sensor while the phone is locked, which doesn't count walks taken with only an Apple Watch. A zero here means you haven't walked yet today.\n\nLock screen widgets update on iOS's schedule, not Furling's, so the widget can trail a few minutes behind. Opening the app updates it right away. You can tap on the widget to open the app."),
+    WidgetSymbol(
+        symbol: "clock.arrow.circlepath",
+        title: "last known reading",
+        detail: "Neither Apple Health nor the motion sensor could be read, so this is the most recent reading from earlier today."),
+    WidgetSymbol(
+        symbol: "exclamationmark.triangle",
+        title: "no reading",
+        detail: "Neither Apple Health nor the motion sensor could be read, and there's no earlier reading from today.\n\nApple Health data can't be read until the phone has been unlocked once after a restart.\n\nIf the warning symbol persists, check Settings › Privacy & Security › Health › Furling and make sure Walking + Running Distance is enabled, and that Motion & Fitness is on for Furling."),
+]
+
+private struct CompactSymbolRow: View {
+    let symbol: WidgetSymbol
+
+    var body: some View {
+        HStack(spacing: 16) {
+            Image(systemName: symbol.symbol)
+                .font(.title3)
+                .frame(width: 30)
+            Text(symbol.title)
+        }
+    }
+}
+
+/// The full explanations, one row per symbol.
+private struct WidgetSymbolsView: View {
+    var body: some View {
+        List {
+            Section {
+                ForEach(widgetSymbols) { symbol in
+                    LegendRow(symbol: symbol.symbol, title: symbol.title, detail: symbol.detail)
+                }
+            }
+        }
+        .scrollContentBackground(.hidden)
+        .background(Color.furlingBackground.ignoresSafeArea())
+        .navigationTitle("Widget Symbols")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

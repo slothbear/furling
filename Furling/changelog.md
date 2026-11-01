@@ -11,6 +11,7 @@ This project doesn't use semantic versioning — the marketing version has staye
 
 ### changed
 - the build number has moved from the main screen to the top of settings
+- the widget symbols in settings are a short list now, with the full explanations a tap away
 
 ## [build 7] - 2026-10-23
 
