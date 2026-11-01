@@ -43,22 +43,6 @@ struct SettingsView: View {
                 }
                 .listSectionSpacing(.compact)
 
-                // The symbols with their names only; the full explanations
-                // are a tap away, the same way past builds are.
-                Section {
-                    ForEach(widgetSymbols) { symbol in
-                        CompactSymbolRow(symbol: symbol)
-                    }
-                    NavigationLink("what they mean") {
-                        WidgetSymbolsView()
-                    }
-                } header: {
-                    Text("widget symbols")
-                }
-                // Grouped lists uppercase section headers by default; this
-                // keeps "widget symbols" as written.
-                .textCase(nil)
-
                 // Only the newest build here; the rest are a tap away, so the
                 // screen doesn't grow by a build every few weeks.
                 if let latest = changelog.first {
@@ -74,6 +58,29 @@ struct SettingsView: View {
                     }
                     .textCase(nil)
                 }
+
+                // The symbols with their names only; the full explanations
+                // are a tap away, the same way past builds are.
+                Section {
+                    ForEach(widgetSymbols) { symbol in
+                        CompactSymbolRow(symbol: symbol)
+                    }
+                    NavigationLink {
+                        WidgetSymbolsView()
+                    } label: {
+                        HStack(spacing: 16) {
+                            Image(systemName: "info.circle")
+                                .font(.title3)
+                                .frame(width: 30)
+                            Text("what they mean")
+                        }
+                    }
+                } header: {
+                    Text("widget symbols")
+                }
+                // Grouped lists uppercase section headers by default; this
+                // keeps "widget symbols" as written.
+                .textCase(nil)
 
             }
             .scrollContentBackground(.hidden)
