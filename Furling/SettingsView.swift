@@ -40,7 +40,7 @@ struct SettingsView: View {
                 .listSectionSpacing(.compact)
 
                 // The symbols with their names only; the full explanations
-                // are a tap away, the same way earlier builds are.
+                // are a tap away, the same way past builds are.
                 Section {
                     ForEach(widgetSymbols) { symbol in
                         CompactSymbolRow(symbol: symbol)
@@ -61,8 +61,8 @@ struct SettingsView: View {
                     Section {
                         ChangelogRow(entry: latest)
                         if changelog.count > 1 {
-                            NavigationLink("earlier builds") {
-                                EarlierBuildsView(entries: Array(changelog.dropFirst()))
+                            NavigationLink("previously on Furling…") {
+                                PreviouslyView(entries: Array(changelog.dropFirst()))
                             }
                         }
                     } header: {
@@ -190,7 +190,7 @@ private struct LegendRow: View {
 
 /// Every build but the newest, newest first, in the same rows the settings
 /// screen uses.
-private struct EarlierBuildsView: View {
+private struct PreviouslyView: View {
     let entries: [ChangelogEntry]
 
     var body: some View {
@@ -203,7 +203,7 @@ private struct EarlierBuildsView: View {
         }
         .scrollContentBackground(.hidden)
         .background(Color.furlingBackground.ignoresSafeArea())
-        .navigationTitle("Earlier Builds")
+        .navigationTitle("Previously on Furling")
         .navigationBarTitleDisplayMode(.inline)
     }
 }

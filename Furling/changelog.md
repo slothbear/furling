@@ -12,6 +12,7 @@ This project doesn't use semantic versioning — the marketing version has staye
 ### changed
 - the build number has moved from the main screen to the top of settings
 - the widget symbols in settings are a short list now, with the full explanations a tap away
+- earlier builds in this list are now found under "previously on Furling…"
 
 ## [build 7] - 2026-10-23
 
