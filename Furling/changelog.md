@@ -9,6 +9,9 @@ This project doesn't use semantic versioning — the marketing version has staye
 ### added
 - leaves drifting down the main screen through November, one more each day
 
+### changed
+- the build number has moved from the main screen to the top of settings
+
 ## [build 7] - 2026-10-23
 
 ### changed

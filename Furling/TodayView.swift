@@ -135,11 +135,6 @@ struct TodayView: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 32)
                 .frame(minHeight: 40)
-
-            Text(buildLabel)
-                .font(.caption2)
-                .foregroundStyle(.tertiary)
-                .padding(.top, 18)
                 .padding(.bottom, 24)
         }
         .frame(maxWidth: .infinity)
@@ -205,16 +200,6 @@ struct TodayView: View {
         }
     }
 
-
-    /// Marketing version and build number, e.g. "Furling 1.0, build 2".
-    /// The build number is labelled rather than parenthesised so a tester
-    /// can find it without knowing the convention.
-    private var buildLabel: String {
-        let info = Bundle.main.infoDictionary
-        let version = info?["CFBundleShortVersionString"] as? String ?? "—"
-        let build = info?["CFBundleVersion"] as? String ?? "—"
-        return "Furling \(version), build \(build)"
-    }
 
     private func begin() async {
         do {

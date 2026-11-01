@@ -18,9 +18,29 @@ struct SettingsView: View {
 
     private let changelog = Changelog.load()
 
+    /// Marketing version and build number, e.g. "Furling 1.0, build 2".
+    /// The build number is labelled rather than parenthesised so a tester
+    /// can find it without knowing the convention.
+    private static var buildLabel: String {
+        let info = Bundle.main.infoDictionary
+        let version = info?["CFBundleShortVersionString"] as? String ?? "—"
+        let build = info?["CFBundleVersion"] as? String ?? "—"
+        return "Furling \(version), build \(build)"
+    }
+
     var body: some View {
         NavigationStack {
             List {
+                // Which build this is, at the top where a tester looks first
+                // when asked. Plain text on the screen's own background
+                // rather than a row in a box.
+                Section {
+                    Text(Self.buildLabel)
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity)
+                        .listRowBackground(Color.clear)
+                }
 
                 Section {
                     LegendRow(
