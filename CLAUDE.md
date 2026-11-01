@@ -30,8 +30,16 @@ Name is a pun: furlong (distance unit) + the Furlings from Stargate.
   day. That is **in the shipped app on purpose**, as a hidden extra — it is
   not announced in the changelog, so leave it out. The date logic is plain
   functions so it can be tested.
+- `Furling/NovemberLeaves.swift` — leaves falling down the main screen in
+  November, over a muted wheat (light) or rust (dark) background. Day N drops
+  N fallers each time the app opens, over about eight seconds; every fifth is
+  a rabbit (`hare.fill`), so six by the 30th. Four hand-drawn leaves — maple,
+  oak, birch, elm — kept as SVG-style path strings. No preview, by request.
+  Skipped under Reduce Motion. The rabbits are a surprise: the changelog
+  mentions only leaves, so leave them out.
 - `FurlingTests/` — unit tests for `Changelog.parse` and for the date logic in
-  `OctoberOrnament`. Both source files are compiled into this target directly
+  `OctoberOrnament` and `NovemberLeaves`. The source files are compiled into
+  this target directly
   (the same way `DistanceStore.swift` is shared with the widget), so there is
   no host app.
   Run with `xcodebuild test -project Furling.xcodeproj -scheme Furling
@@ -98,7 +106,7 @@ Name is a pun: furlong (distance unit) + the Furlings from Stargate.
 
 ## Current state
 
-Build 6 distributed, build 7 in progress. Internal TestFlight group
+Build 7 distributed, build 8 in progress. Internal TestFlight group
 "kuniklaro". Source lives at github.com/slothbear/furling, public, pushed over
 SSH; distribution builds are tagged `build_N` at the point they are uploaded,
 not when the number is bumped.

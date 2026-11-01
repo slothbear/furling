@@ -41,6 +41,8 @@ struct TodayView: View {
     @State private var showingSettings = false
     @State private var burstStart: Date?
     @State private var screenSize = CGSize.zero
+    @State private var leavesStart: Date?
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     /// Long-pressing the countdown caption pretends it is 31 October, so
     /// Halloween can be tried out in advance. Left in the shipped app on
     /// purpose, and not announced.
@@ -143,10 +145,16 @@ struct TodayView: View {
         .frame(maxWidth: .infinity)
         // The confetti spreads itself across this whole view, so it needs this
         // view's size and a coordinate space to locate the candy corn within.
+        .overlay {
+            if let leavesStart, let day = NovemberLeaves.dayOfNovember(Date()) {
+                FallingLeaves(day: day, start: leavesStart)
+                    .id(leavesStart)
+            }
+        }
         .coordinateSpace(name: OctoberOrnament.screenSpace)
         .onGeometryChange(for: CGSize.self) { $0.size } action: { screenSize = $0 }
         .background(
-            (isOctober ? Color.furlingOctoberBackground : Color.furlingBackground)
+            seasonalBackground
                 .ignoresSafeArea()
         )
         .sheet(isPresented: $showingSettings) {
@@ -167,6 +175,14 @@ struct TodayView: View {
     /// Each time the app opens on Halloween, set off the burst.
     private func celebrate() {
         if OctoberOrnament.isHalloween(Date()) { burstStart = Date() }
+        if NovemberLeaves.dayOfNovember(Date()) != nil, !reduceMotion { leavesStart = Date() }
+    }
+
+    /// Peach in October, wheat or rust in November, the usual otherwise.
+    private var seasonalBackground: Color {
+        if isOctober { return .furlingOctoberBackground }
+        if NovemberLeaves.dayOfNovember(shownDate) != nil { return .furlingNovemberBackground }
+        return .furlingBackground
     }
 
     /// Mirrors the widget's symbol vocabulary, with room here to explain.
@@ -188,6 +204,7 @@ struct TodayView: View {
                 .foregroundStyle(Color.furlingWarning)
         }
     }
+
 
     /// Marketing version and build number, e.g. "Furling 1.0, build 2".
     /// The build number is labelled rather than parenthesised so a tester

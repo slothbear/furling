@@ -12,7 +12,11 @@ is recorded in `changelog.md`.
 Intended for the build in progress. If this list stops being short it has
 stopped being true.
 
-Nothing at the moment.
+- **Rename "earlier builds" to "previously on Furling…"** — the row in new &
+  noteworthy, with the screen titled "Previously on Furling". Name settled
+  2026-10-23. *Why:* the TV recap of past episodes is exactly what the screen
+  is, and it suits the app's tone. Held for build 8 because build 7 was
+  already tagged.
 
 ## decisions
 
