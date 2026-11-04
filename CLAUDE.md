@@ -34,9 +34,14 @@ Name is a pun: furlong (distance unit) + the Furlings from Stargate.
   November, over a muted wheat (light) or rust (dark) background. Day N drops
   N fallers each time the app opens, over about eight seconds; every fifth is
   a rabbit (`hare.fill`), so six by the 30th. Four hand-drawn leaves — maple,
-  oak, birch, elm — kept as SVG-style path strings. No preview, by request.
-  Skipped under Reduce Motion. The rabbits are a surprise: the changelog
-  mentions only leaves, so leave them out.
+  oak, birch, elm — kept as SVG-style path strings. They land in a strip of
+  grass along the bottom (`NovemberGrass`, a back layer behind the content and
+  a sparser front fringe over the pile) and stay until the app next opens;
+  rabbits land upright. On US Election Day (the Tuesday after the first
+  Monday, `isElectionDay`) the leaves are broad ballot leaves reading VOTE,
+  landing the right way up. The falling is skipped under Reduce Motion; the
+  grass stays. The rabbits are a surprise: the changelog mentions only
+  leaves, so leave them out.
 - `FurlingTests/` — unit tests for `Changelog.parse` and for the date logic in
   `OctoberOrnament` and `NovemberLeaves`. The source files are compiled into
   this target directly
@@ -106,7 +111,7 @@ Name is a pun: furlong (distance unit) + the Furlings from Stargate.
 
 ## Current state
 
-Build 7 distributed, build 8 in progress. Internal TestFlight group
+Build 9 distributed. Internal TestFlight group
 "kuniklaro". Source lives at github.com/slothbear/furling, public, pushed over
 SSH; distribution builds are tagged `build_N` at the point they are uploaded,
 not when the number is bumped.

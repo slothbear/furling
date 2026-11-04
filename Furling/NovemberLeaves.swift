@@ -4,8 +4,10 @@
 //
 //  Leaves falling down the main screen through November: one on the 1st, one
 //  more each day, thirty on the 30th. Every fifth one is a rabbit. They fall
-//  each time the app opens, take a few seconds, and are gone. November only,
-//  decided by the date, so nothing needs removing and it returns every year.
+//  each time the app opens and settle in a strip of grass along the bottom,
+//  where they stay until the app next opens. On Election Day the leaves are
+//  ballot leaves that say VOTE. November only, decided by the date, so
+//  nothing needs removing and it returns every year.
 //
 //  Kept free of anything from the app target so the test target can compile
 //  this file directly.
@@ -42,6 +44,14 @@ enum NovemberLeaves {
     static func isRabbit(_ index: Int) -> Bool { (index + 1) % 5 == 0 }
 
     static func rabbitCount(onDay day: Int) -> Int { day / 5 }
+
+    /// US Election Day: the Tuesday after the first Monday in November, so
+    /// anywhere from the 2nd to the 8th. It falls on 3 November in 2026.
+    static func isElectionDay(_ date: Date, calendar: Calendar = .current) -> Bool {
+        let parts = calendar.dateComponents([.month, .day, .weekday], from: date)
+        guard parts.month == 11, parts.weekday == 3, let day = parts.day else { return false }
+        return (2...8).contains(day)
+    }
 }
 
 // MARK: - Leaf shapes
@@ -71,6 +81,11 @@ enum LeafKind: CaseIterable {
         case .elm:   "M50 90 L49 14 M50 26 L60 20 M50 38 L65 32 M50 50 L66 46 M50 62 L62 62 M49 26 L40 21 M49 38 L33 33 M50 50 L32 48 M50 62 L36 62"
         }
     }
+
+    /// A broad, plain leaf for Election Day — wide enough in the middle to
+    /// carry a word, with no veins to fight it.
+    fileprivate static let ballotOutline =
+        "M50 8 C78 18 92 46 76 68 C68 78 57 82 52 84 L52 94 L48 94 L48 84 C43 82 32 78 24 68 C8 46 22 18 50 8 Z"
 }
 
 /// A path given in the SVG subset the leaves use — absolute M, L, C and Z —
@@ -149,6 +164,17 @@ private enum AutumnColor {
     static func rabbit(dark: Bool) -> Color {
         Color(hex: dark ? 0xF1E6D6 : 0x5A3B26)
     }
+
+    /// Dry late-autumn grass. The front fringe is a shade off the back so the
+    /// two layers read as depth rather than one flat strip.
+    static func grass(front: Bool, dark: Bool) -> Color {
+        switch (front, dark) {
+        case (false, false): Color(hex: 0x8C9A5B)
+        case (true, false):  Color(hex: 0x6E7D42)
+        case (false, true):  Color(hex: 0x2E3A1E)
+        case (true, true):   Color(hex: 0x3F4D28)
+        }
+    }
 }
 
 private extension Color {
@@ -163,6 +189,8 @@ private extension Color {
 
 struct FallingLeaves: View {
     let day: Int
+    /// Election Day: the leaves become ballot leaves that say VOTE.
+    var ballot = false
     let start: Date
 
     @Environment(\.colorScheme) private var colorScheme
@@ -171,6 +199,7 @@ struct FallingLeaves: View {
 
     fileprivate struct Faller {
         let rabbit: Bool
+        let ballot: Bool
         let kind: LeafKind
         let colorIndex: Int
         let x: Double          // 0...1 across the width
@@ -181,55 +210,79 @@ struct FallingLeaves: View {
         let swayRate: Double
         let spin: Double       // degrees over the whole fall
         let tilt: Double
+        let rest: Double       // centre's height above the bottom once landed
 
-        static func make(count: Int) -> [Faller] {
+        static func make(count: Int, ballot: Bool) -> [Faller] {
             (0..<count).map { index in
-                Faller(rabbit: NovemberLeaves.isRabbit(index),
-                       kind: LeafKind.allCases.randomElement()!,
-                       colorIndex: .random(in: 0..<4),
-                       x: .random(in: 0.06...0.94),
-                       delay: .random(in: 0...3.5),
-                       duration: .random(in: 6...8.5),
-                       size: .random(in: 24...40),
-                       sway: .random(in: 14...38),
-                       swayRate: .random(in: 0.8...1.6),
-                       spin: .random(in: -260...260),
-                       tilt: .random(in: 0..<360))
+                let rabbit = NovemberLeaves.isRabbit(index)
+                let ballotLeaf = ballot && !rabbit
+                let size: Double = ballotLeaf ? .random(in: 54...66) : .random(in: 24...40)
+                let spin: Double = .random(in: -260...260)
+                // Rabbits land on their feet and ballot leaves land readable;
+                // ordinary leaves come to rest however they happen to fall.
+                let landing: Double? = rabbit ? .random(in: -8...8)
+                    : ballotLeaf ? .random(in: -20...20) : nil
+                let rest: Double = rabbit ? size / 2 + 4
+                    : ballotLeaf ? .random(in: 24...34) : .random(in: 6...24)
+                return Faller(rabbit: rabbit,
+                              ballot: ballotLeaf,
+                              kind: LeafKind.allCases.randomElement()!,
+                              colorIndex: .random(in: 0..<4),
+                              x: .random(in: 0.06...0.94),
+                              delay: .random(in: 0...3.5),
+                              duration: .random(in: 6...8.5),
+                              size: size,
+                              sway: .random(in: 14...38),
+                              swayRate: .random(in: 0.8...1.6),
+                              spin: spin,
+                              tilt: landing.map { $0 - spin } ?? .random(in: 0..<360),
+                              rest: rest)
             }
         }
     }
 
-    /// Long enough for the slowest, latest leaf to clear the bottom.
+    /// Long enough for the slowest, latest leaf to land. After that the
+    /// timeline pauses and the pile stays as it lies.
     private static let total = 3.5 + 8.5 + 0.3
 
     var body: some View {
         GeometryReader { geometry in
             let width = geometry.size.width
             let height = geometry.size.height
-            TimelineView(.animation(paused: finished)) { context in
-                let elapsed = context.date.timeIntervalSince(start)
-                ZStack(alignment: .topLeading) {
-                    ForEach(fallers.indices, id: \.self) { index in
-                        let f = fallers[index]
-                        let t = (elapsed - f.delay) / f.duration
-                        if t > 0, t < 1 {
-                            piece(f)
-                                .frame(width: f.size, height: f.size)
-                                .rotationEffect(.degrees(f.tilt + f.spin * t))
-                                .position(
-                                    x: f.x * width + sin(elapsed * f.swayRate * 2) * f.sway,
-                                    y: -f.size + (height + 2 * f.size) * t)
+            ZStack(alignment: .bottom) {
+                TimelineView(.animation(paused: finished)) { context in
+                    let elapsed = context.date.timeIntervalSince(start)
+                    ZStack(alignment: .topLeading) {
+                        ForEach(fallers.indices, id: \.self) { index in
+                            let f = fallers[index]
+                            // Clamped at 1: once landed, a leaf stops where it is.
+                            let t = min((elapsed - f.delay) / f.duration, 1)
+                            if t > 0 {
+                                let swayTime = f.delay + f.duration * t
+                                let restY = height - f.rest
+                                piece(f)
+                                    .frame(width: f.size, height: f.size)
+                                    .rotationEffect(.degrees(f.tilt + f.spin * t))
+                                    .position(
+                                        // Kept on screen, so none lands half off the edge.
+                                        x: min(max(f.x * width + sin(swayTime * f.swayRate * 2) * f.sway,
+                                                   f.size / 2), width - f.size / 2),
+                                        y: -f.size + (restY + f.size) * t)
+                            }
                         }
                     }
+                    .frame(width: width, height: height, alignment: .topLeading)
                 }
-                .frame(width: width, height: height, alignment: .topLeading)
+                // A sparser fringe in front, so the pile sits in the grass
+                // rather than on top of it.
+                NovemberGrass(layer: .front)
             }
         }
         .ignoresSafeArea()
         .allowsHitTesting(false)
         .accessibilityHidden(true)
         .onAppear {
-            fallers = Faller.make(count: NovemberLeaves.fallerCount(onDay: day))
+            fallers = Faller.make(count: NovemberLeaves.fallerCount(onDay: day), ballot: ballot)
         }
         .task {
             try? await Task.sleep(for: .seconds(Self.total))
@@ -245,6 +298,16 @@ struct FallingLeaves: View {
                 .resizable()
                 .scaledToFit()
                 .foregroundStyle(AutumnColor.rabbit(dark: dark))
+        } else if f.ballot {
+            LeafPathShape(LeafKind.ballotOutline)
+                .fill(AutumnColor.leaf(f.colorIndex, dark: dark))
+                .overlay {
+                    Text("VOTE")
+                        .font(.system(size: f.size * 0.2, weight: .heavy, design: .rounded))
+                        .kerning(0.5)
+                        .foregroundStyle(Color(hex: 0xFFF6E6))
+                        .offset(y: -f.size * 0.04)
+                }
         } else {
             LeafPathShape(f.kind.outline)
                 .fill(AutumnColor.leaf(f.colorIndex, dark: dark))
@@ -256,7 +319,79 @@ struct FallingLeaves: View {
     }
 }
 
+// MARK: - Grass
+
+/// A strip of grass along the bottom edge through November. The back layer
+/// sits behind the main screen's content; the front layer is drawn over the
+/// fallen leaves so they look tucked in.
+struct NovemberGrass: View {
+    enum Layer { case back, front }
+    var layer: Layer = .back
+
+    @Environment(\.colorScheme) private var colorScheme
+
+    var body: some View {
+        let front = layer == .front
+        GrassShape(spacing: front ? 11 : 5,
+                   heights: front ? 8...20 : 14...36,
+                   salt: front ? 7 : 1)
+            .fill(AutumnColor.grass(front: front, dark: colorScheme == .dark))
+            .frame(height: 40)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+            .ignoresSafeArea()
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
+    }
+}
+
+/// Blades of grass standing on the bottom of the rect. Placement comes from a
+/// fixed hash of the blade's index, so the strip looks the same every time.
+struct GrassShape: Shape {
+    let spacing: Double
+    let heights: ClosedRange<Double>
+    let salt: Int
+
+    private func noise(_ i: Int, _ k: Int) -> Double {
+        let v = sin(Double(i) * 12.9898 + Double(salt * 10 + k) * 78.233) * 43758.5453
+        return v - v.rounded(.down)
+    }
+
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let base = rect.maxY
+        var x = rect.minX - spacing
+        var i = 0
+        while x < rect.maxX + spacing {
+            let h = heights.lowerBound + (heights.upperBound - heights.lowerBound) * noise(i, 0)
+            let w = spacing * (1.2 + noise(i, 1))
+            let lean = (noise(i, 2) - 0.5) * h * 0.6
+            path.move(to: CGPoint(x: x - w / 2, y: base))
+            path.addQuadCurve(to: CGPoint(x: x + lean, y: base - h),
+                              control: CGPoint(x: x - w / 4 + lean * 0.3, y: base - h * 0.6))
+            path.addQuadCurve(to: CGPoint(x: x + w / 2, y: base),
+                              control: CGPoint(x: x + w / 4 + lean * 0.3, y: base - h * 0.5))
+            path.closeSubpath()
+            x += spacing * (0.7 + 0.6 * noise(i, 3))
+            i += 1
+        }
+        // A solid turf line so no background shows between blade roots.
+        path.addRect(CGRect(x: rect.minX, y: base - 3, width: rect.width, height: 3))
+        return path
+    }
+}
+
 #Preview("day 30") {
     FallingLeaves(day: 30, start: Date())
-        .background(Color.furlingNovemberBackground)
+        .background {
+            Color.furlingNovemberBackground
+            NovemberGrass()
+        }
+}
+
+#Preview("Election Day") {
+    FallingLeaves(day: 3, ballot: true, start: Date())
+        .background {
+            Color.furlingNovemberBackground
+            NovemberGrass()
+        }
 }

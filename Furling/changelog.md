@@ -4,6 +4,11 @@ All noteworthy changes to Furling are documented here, feeding the new & notewor
 
 This project doesn't use semantic versioning — the marketing version has stayed 1.0 across every TestFlight build so far, so entries are keyed by build number instead.
 
+## [build 9] - 2026-11-03
+
+### added
+- fallen leaves now settle in the grass along the bottom of the screen
+
 ## [build 8] - 2026-11-01
 
 ### added

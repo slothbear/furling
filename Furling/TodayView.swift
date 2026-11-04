@@ -142,16 +142,22 @@ struct TodayView: View {
         // view's size and a coordinate space to locate the candy corn within.
         .overlay {
             if let leavesStart, let day = NovemberLeaves.dayOfNovember(Date()) {
-                FallingLeaves(day: day, start: leavesStart)
+                FallingLeaves(day: day,
+                              ballot: NovemberLeaves.isElectionDay(leavesStart),
+                              start: leavesStart)
                     .id(leavesStart)
             }
         }
         .coordinateSpace(name: OctoberOrnament.screenSpace)
         .onGeometryChange(for: CGSize.self) { $0.size } action: { screenSize = $0 }
-        .background(
+        .background {
             seasonalBackground
                 .ignoresSafeArea()
-        )
+            // Shown even under Reduce Motion: grass that stands still is fine.
+            if NovemberLeaves.dayOfNovember(shownDate) != nil {
+                NovemberGrass()
+            }
+        }
         .sheet(isPresented: $showingSettings) {
             SettingsView()
         }

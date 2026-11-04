@@ -67,4 +67,14 @@ struct NovemberLeavesTests {
         }
         #expect(NovemberLeaves.rabbitCount(onDay: 30) == 6)
     }
+
+    @Test func electionDayIsTheTuesdayAfterTheFirstMonday() {
+        #expect(NovemberLeaves.isElectionDay(date(11, 3), calendar: calendar))
+        #expect(NovemberLeaves.isElectionDay(date(11, 2, year: 2027), calendar: calendar))
+        #expect(NovemberLeaves.isElectionDay(date(11, 7, year: 2028), calendar: calendar))
+        // 1 November 2033 is a Tuesday, but no Monday has come yet.
+        #expect(!NovemberLeaves.isElectionDay(date(11, 1, year: 2033), calendar: calendar))
+        #expect(NovemberLeaves.isElectionDay(date(11, 8, year: 2033), calendar: calendar))
+        #expect(!NovemberLeaves.isElectionDay(date(11, 4), calendar: calendar))
+    }
 }
