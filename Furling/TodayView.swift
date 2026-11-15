@@ -136,6 +136,15 @@ struct TodayView: View {
                 .padding(.horizontal, 32)
                 .frame(minHeight: 40)
                 .padding(.bottom, 24)
+
+            // In November, room kept for the hedge and the leaves piling on
+            // it, so the number centres in the open space above them. A
+            // spacer of its own rather than padding on `status`: when there
+            // is nothing to report, `status` is empty and its padding goes
+            // with it.
+            if NovemberLeaves.dayOfNovember(shownDate) != nil {
+                Color.clear.frame(height: 110)
+            }
         }
         .frame(maxWidth: .infinity)
         // The confetti spreads itself across this whole view, so it needs this
@@ -153,9 +162,9 @@ struct TodayView: View {
         .background {
             seasonalBackground
                 .ignoresSafeArea()
-            // Shown even under Reduce Motion: grass that stands still is fine.
+            // Shown even under Reduce Motion: a hedge that stands still is fine.
             if NovemberLeaves.dayOfNovember(shownDate) != nil {
-                NovemberGrass()
+                NovemberHedge()
             }
         }
         .sheet(isPresented: $showingSettings) {

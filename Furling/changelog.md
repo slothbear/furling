@@ -4,6 +4,13 @@ All noteworthy changes to Furling are documented here, feeding the new & notewor
 
 This project doesn't use semantic versioning — the marketing version has stayed 1.0 across every TestFlight build so far, so entries are keyed by build number instead.
 
+## [build 10] - 2026-11-14
+
+### changed
+- the grass along the bottom of the screen is now a real hedge, from a photo of Tricia's front yard bushes
+- falling leaves pile up on top of the hedge and on each other, lying flat the way leaves do
+- today's miles sit a little higher on the screen through November, clear of the hedge
+
 ## [build 9] - 2026-11-03
 
 ### added

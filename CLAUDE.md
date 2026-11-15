@@ -33,14 +33,25 @@ Name is a pun: furlong (distance unit) + the Furlings from Stargate.
 - `Furling/NovemberLeaves.swift` — leaves falling down the main screen in
   November, over a muted wheat (light) or rust (dark) background. Day N drops
   N fallers each time the app opens, over about eight seconds; every fifth is
-  a rabbit (`hare.fill`), so six by the 30th. Four hand-drawn leaves — maple,
-  oak, birch, elm — kept as SVG-style path strings. They land in a strip of
-  grass along the bottom (`NovemberGrass`, a back layer behind the content and
-  a sparser front fringe over the pile) and stay until the app next opens;
-  rabbits land upright. On US Election Day (the Tuesday after the first
+  a rabbit, so six by the 30th — `hare` or `hare.fill` at random, in a leaf
+  colour or, about one in three, white. White ones are always `hare.fill`;
+  a white outline is too faint on the wheat. Four hand-drawn leaves — maple,
+  oak, birch, elm — kept as SVG-style path strings. Along the bottom is
+  `NovemberHedge`, Adam's own photo of a hedge (asset `NovemberHedge`), cut
+  along the top of the greenery by an edge traced from the photo and stored
+  as fractions in `NovemberHedge.edge`; replacing the photo means retracing
+  that. Dimmed in dark mode. Leaves pile on that edge in landing order, each
+  on whatever is highest beneath it, sinking only part way onto a leaf below
+  so none is hidden, and slipping sideways to lower ground nearby rather than
+  balancing on a peak. They stay until the app next opens. Leaves land lying
+  on their side, never stood on end; rabbits tumble in any way up.
+  All month a fixed spacer at the bottom of the main screen keeps the number
+  centred in the open space above the hedge. It is a spacer rather than
+  padding on the status line because that line is usually empty, and an
+  empty view's padding disappears with it. On US Election Day (the Tuesday after the first
   Monday, `isElectionDay`) the leaves are broad ballot leaves reading VOTE,
   landing the right way up. The falling is skipped under Reduce Motion; the
-  grass stays. The rabbits are a surprise: the changelog mentions only
+  hedge stays. The rabbits are a surprise: the changelog mentions only
   leaves, so leave them out.
 - `FurlingTests/` — unit tests for `Changelog.parse` and for the date logic in
   `OctoberOrnament` and `NovemberLeaves`. The source files are compiled into
@@ -111,7 +122,7 @@ Name is a pun: furlong (distance unit) + the Furlings from Stargate.
 
 ## Current state
 
-Build 9 distributed. Internal TestFlight group
+Build 10 distributed. Internal TestFlight group
 "kuniklaro". Source lives at github.com/slothbear/furling, public, pushed over
 SSH; distribution builds are tagged `build_N` at the point they are uploaded,
 not when the number is bumped.
