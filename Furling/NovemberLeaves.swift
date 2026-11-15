@@ -247,10 +247,11 @@ struct FallingLeaves: View {
                 let ballotLeaf = ballot && !rabbit
                 let size: Double = ballotLeaf ? .random(in: 54...66) : .random(in: 24...40)
                 let spin: Double = .random(in: -260...260)
-                // Rabbits tumble in any way up, and ballot leaves land
-                // readable. Ordinary leaves come to rest lying on their side,
-                // stem to the left or right, never stood on end.
-                let landing: Double = rabbit ? .random(in: 0..<360)
+                // Rabbits tumble on the way down but land on their feet, level,
+                // and ballot leaves land readable. Ordinary leaves come to rest
+                // lying on their side, stem to the left or right, never stood
+                // on end.
+                let landing: Double = rabbit ? 0
                     : ballotLeaf ? .random(in: -20...20)
                     : (Bool.random() ? 90 : -90) + .random(in: -22...22)
                 let colorIndex = Int.random(in: 0..<(rabbit ? AutumnColor.rabbitColors : 4))

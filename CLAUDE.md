@@ -44,7 +44,8 @@ Name is a pun: furlong (distance unit) + the Furlings from Stargate.
   on whatever is highest beneath it, sinking only part way onto a leaf below
   so none is hidden, and slipping sideways to lower ground nearby rather than
   balancing on a peak. They stay until the app next opens. Leaves land lying
-  on their side, never stood on end; rabbits tumble in any way up.
+  on their side, never stood on end; rabbits tumble on the way
+  down but land on their feet, level.
   All month a fixed spacer at the bottom of the main screen keeps the number
   centred in the open space above the hedge. It is a spacer rather than
   padding on the status line because that line is usually empty, and an
@@ -143,11 +144,13 @@ it when picking up work; it is not loaded automatically the way this file is.
   Apple Health, HealthKit, GitHub, Furling, TestFlight. System chrome is exempt — a navigation title or a standard
   button ("Settings", "Done", "Refresh") keeps the capital iOS gives it.
   Flag capitalisation choices as they come up rather than deciding silently.
-- **Run the tests yourself, but only when the changelog is involved.** He does
-  not want to think about it, and he does not want them run for anything else.
-  Run the suite after a change to `Changelog.swift` or `changelog.md`, and say
-  so in a line, plainly, if a test fails rather than working around it. Do not
-  run it for view, layout or ornament changes. (The suite also covers
+- **Run the tests yourself, but only when the changelog parser is involved.**
+  He does not want to think about it, and he does not want them run for
+  anything else. Run the suite after a change to `Changelog.swift`, and say so
+  in a line, plainly, if a test fails rather than working around it. Do not
+  run it for edits to `changelog.md` alone — decided 2026-11-15, after he
+  stopped the run twice for changelog wording — nor for view, layout or
+  ornament changes. (The suite also covers
   `OctoberOrnament`'s date functions; whether an edit to those should trigger
   a run has not been decided.)
 - Grams for weight, never cups.
