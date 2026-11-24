@@ -33,9 +33,8 @@ Name is a pun: furlong (distance unit) + the Furlings from Stargate.
 - `Furling/NovemberLeaves.swift` — leaves falling down the main screen in
   November, over a muted wheat (light) or rust (dark) background. Day N drops
   N fallers each time the app opens, over about eight seconds; every fifth is
-  a rabbit, so six by the 30th — `hare` or `hare.fill` at random, in a leaf
-  colour or, about one in three, white. White ones are always `hare.fill`;
-  a white outline is too faint on the wheat. Four hand-drawn leaves — maple,
+  a rabbit, so six by the 30th — `hare` or `hare.fill` at random, always in
+  one of the leaf colours, never white. Four hand-drawn leaves — maple,
   oak, birch, elm — kept as SVG-style path strings. Along the bottom is
   `NovemberHedge`, Adam's own photo of a hedge (asset `NovemberHedge`), cut
   along the top of the greenery by an edge traced from the photo and stored
@@ -43,20 +42,56 @@ Name is a pun: furlong (distance unit) + the Furlings from Stargate.
   that. Dimmed in dark mode. Leaves pile on that edge in landing order, each
   on whatever is highest beneath it, sinking only part way onto a leaf below
   so none is hidden, and slipping sideways to lower ground nearby rather than
-  balancing on a peak. They stay until the app next opens. Leaves land lying
+  balancing on a peak. They stay until the app leaves the foreground, and
+  are cleared then (bag and all) so it reopens on a bare hedge rather than
+  flashing the old pile from iOS's snapshot. Leaves land lying
   on their side, never stood on end; rabbits tumble on the way
   down but land on their feet, level.
+  A brown paper yard bag, tall, its top folded into a crumpled cuff,
+  stands in front of the middle of the hedge. Nothing comes to rest behind
+  it: a faller whose path would overlap it hops off to the nearer side
+  (`Rest.bounce`) and settles there, rolling down the heap rather than
+  stacking against it — or to the far side, if the near one has piled up
+  well above it. It was first near the right-hand edge, where the gap was
+  too narrow and late arrivals had to hop the whole width of the bag to
+  the left. The bag is drawn behind the leaves, so one mid-bounce shows
+  in front. As each faller lands, rabbits
+  included, the number printed on it counts up and a burnt-orange fill
+  rises a thirtieth of the way, so the number ends on the date and the bag
+  is full on the 30th. Full stops short of the cuff (`Bag.fullLine`),
+  leaving bare paper under its shadow. On the 30th, once the last faller
+  is in, the bag overflows (`Bag.heap`, `Bag.overspill`): a heap of leaves
+  rises out of its mouth behind the cuff, then four tip over the rim, two
+  caught on the cuff's corners and two partway down the sides. Then it
+  keeps overflowing for five seconds (`Bag.sprayTime`): seventy leaves and
+  rabbits (`Spray`) thrown up out of the mouth to either side, falling off
+  the bottom of the screen rather than joining the pile. Under
+  Reduce Motion it shows the day's total from the start, overflowing
+  already on the 30th, with no spray.
   All month a fixed spacer at the bottom of the main screen keeps the number
   centred in the open space above the hedge. It is a spacer rather than
   padding on the status line because that line is usually empty, and an
   empty view's padding disappears with it. On US Election Day (the Tuesday after the first
   Monday, `isElectionDay`) the leaves are broad ballot leaves reading VOTE,
-  landing the right way up. The falling is skipped under Reduce Motion; the
-  hedge stays. The rabbits are a surprise: the changelog mentions only
-  leaves, so leave them out.
+  landing the right way up. On Thanksgiving (the fourth Thursday,
+  `isThanksgiving`) the rabbits are turkeys instead. SF Symbols has none, so
+  `Turkey` is drawn to match `hare` / `hare.fill`: side-on, one leaf
+  colour, outline or filled at random, half as big again as a rabbit. A
+  multicoloured front-on turkey was tried first and read as more leaves.
+  They tumble and land upright like the rabbits. On Black Friday
+  (the day after, `isBlackFriday`) they are Amazon-style boxes, hand-drawn
+  front-on (`ShippingBox`), outline or filled, always the brown leaf
+  colour as cardboard, the same size as the turkeys so the smile reads,
+  and the smile centred. Shopping bags were tried alongside and dropped;
+  so was the `shippingbox` symbol, whose perspective put the smile
+  off-centre. Each kind of stand-in is a `StandIn` case. The falling
+  is skipped under Reduce Motion; the hedge stays. The rabbits and their
+  Thanksgiving and Black Friday stand-ins are a surprise: the changelog
+  mentions only leaves, so leave them out.
 - `FurlingTests/` — unit tests for `Changelog.parse` and for the date logic in
-  `OctoberOrnament` and `NovemberLeaves`. The source files are compiled into
-  this target directly
+  `OctoberOrnament` and `NovemberLeaves` (Election Day, Thanksgiving, Black
+  Friday). The
+  source files are compiled into this target directly
   (the same way `DistanceStore.swift` is shared with the widget), so there is
   no host app.
   Run with `xcodebuild test -project Furling.xcodeproj -scheme Furling
@@ -123,7 +158,7 @@ Name is a pun: furlong (distance unit) + the Furlings from Stargate.
 
 ## Current state
 
-Build 10 distributed. Internal TestFlight group
+Build 12 distributed. Internal TestFlight group
 "kuniklaro". Source lives at github.com/slothbear/furling, public, pushed over
 SSH; distribution builds are tagged `build_N` at the point they are uploaded,
 not when the number is bumped.

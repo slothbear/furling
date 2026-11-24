@@ -77,4 +77,23 @@ struct NovemberLeavesTests {
         #expect(NovemberLeaves.isElectionDay(date(11, 8, year: 2033), calendar: calendar))
         #expect(!NovemberLeaves.isElectionDay(date(11, 4), calendar: calendar))
     }
+
+    @Test func thanksgivingIsTheFourthThursday() {
+        #expect(NovemberLeaves.isThanksgiving(date(11, 26), calendar: calendar))
+        #expect(NovemberLeaves.isThanksgiving(date(11, 25, year: 2027), calendar: calendar))
+        // 1 November 2029 is itself a Thursday, so the fourth is the 22nd.
+        #expect(NovemberLeaves.isThanksgiving(date(11, 22, year: 2029), calendar: calendar))
+        #expect(NovemberLeaves.isThanksgiving(date(11, 28, year: 2030), calendar: calendar))
+        #expect(!NovemberLeaves.isThanksgiving(date(11, 19), calendar: calendar))
+        #expect(!NovemberLeaves.isThanksgiving(date(11, 27), calendar: calendar))
+    }
+
+    @Test func blackFridayIsTheDayAfterThanksgiving() {
+        #expect(NovemberLeaves.isBlackFriday(date(11, 27), calendar: calendar))
+        #expect(NovemberLeaves.isBlackFriday(date(11, 23, year: 2029), calendar: calendar))
+        #expect(NovemberLeaves.isBlackFriday(date(11, 29, year: 2030), calendar: calendar))
+        // A Friday, but a week early; and Thanksgiving itself.
+        #expect(!NovemberLeaves.isBlackFriday(date(11, 20), calendar: calendar))
+        #expect(!NovemberLeaves.isBlackFriday(date(11, 26), calendar: calendar))
+    }
 }

@@ -153,6 +153,9 @@ struct TodayView: View {
             if let leavesStart, let day = NovemberLeaves.dayOfNovember(Date()) {
                 FallingLeaves(day: day,
                               ballot: NovemberLeaves.isElectionDay(leavesStart),
+                              thanksgiving: NovemberLeaves.isThanksgiving(leavesStart),
+                              blackFriday: NovemberLeaves.isBlackFriday(leavesStart),
+                              still: reduceMotion,
                               start: leavesStart)
                     .id(leavesStart)
             }
@@ -178,6 +181,11 @@ struct TodayView: View {
             if phase == .active {
                 celebrate()
                 Task { await load() }
+            } else {
+                // Clear November's pile on the way out, before iOS takes the
+                // snapshot it shows on return, so the app reopens on a bare
+                // hedge rather than flashing yesterday's leaves.
+                leavesStart = nil
             }
         }
     }
@@ -185,7 +193,8 @@ struct TodayView: View {
     /// Each time the app opens on Halloween, set off the burst.
     private func celebrate() {
         if OctoberOrnament.isHalloween(Date()) { burstStart = Date() }
-        if NovemberLeaves.dayOfNovember(Date()) != nil, !reduceMotion { leavesStart = Date() }
+        // Under Reduce Motion nothing falls, but the leaf bag still shows.
+        if NovemberLeaves.dayOfNovember(Date()) != nil { leavesStart = Date() }
     }
 
     /// Peach in October, wheat or rust in November, the usual otherwise.

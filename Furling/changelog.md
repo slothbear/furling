@@ -1,8 +1,13 @@
 # changelog
 
-All noteworthy changes to Furling are documented here, feeding the new & noteworthy section in settings.
+Noteworthy changes to Furling are documented here, feeding the new & noteworthy section in settings.
 
 This project doesn't use semantic versioning — the marketing version has stayed 1.0 across every TestFlight build so far, so entries are keyed by build number instead.
+
+## [build 12] - 2026-11-24
+
+### added
+- a paper leaf bag in front of the hedge counts the leaves as they land, and fills a little more each day
 
 ## [build 11] - 2026-11-15
 
